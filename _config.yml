@@ -1,0 +1,146 @@
+# Hexo Configuration
+## Docs: https://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+# Site
+title: CYNARA Group
+subtitle: '汐奈工作室'
+description: 'CYNARA'
+keywords: Cynara,Minecraft,汐奈
+author: CYNARA
+language: zh_CN
+timezone: ''
+
+# URL
+## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
+url: https://www.cynara.asia
+permalink: posts/:abbrlink.html
+permalink_defaults:
+pretty_urls:
+  trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
+  trailing_html: true # Set to false to remove trailing '.html' from permalinks
+
+# Directory
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# Writing
+new_post_name: :title.md # File name of new posts
+default_layout: post
+titlecase: false # Transform title into titlecase
+external_link:
+  enable: true # Open external links in new tab
+  field: site # Apply to the whole site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+syntax_highlighter: highlight.js
+highlight:
+  line_number: true
+  auto_detect: false
+  tab_replace: ''
+  wrap: true
+  hljs: false
+prismjs:
+  preprocess: true
+  line_number: true
+  tab_replace: ''
+
+# Home page setting
+# path: Root path for your blogs index page. (default = '')
+# per_page: Posts displayed per page. (0 = disable pagination)
+# order_by: Posts order. (Order by date descending by default)
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+tag_map:
+
+# Metadata elements
+## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+meta_generator: true
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+## updated_option supports 'mtime', 'date', 'empty'
+updated_option: 'mtime'
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 10
+pagination_dir: page
+
+# Include / Exclude file(s)
+## include:/exclude: options only apply to the 'source/' folder
+include:
+exclude:
+ignore:
+
+# Extensions
+## Plugins: https://hexo.io/plugins/
+## Themes: https://hexo.io/themes/
+theme: butterfly
+
+# Deployment
+## Docs: https://hexo.io/docs/one-command-deployment
+deploy:
+  type: ''
+
+# 文章链接转数字或字母：https://github.com/rozbo/hexo-abbrlink
+abbrlink:
+	alg: crc16   #算法： crc16(default) and crc32
+	rep: hex     #进制： dec(default) and hex: dec #输出进制：十进制和十六进制，默认为10进制。丨dec为十进制，hex为十六进制
+
+# wowjs
+# see https://www.npmjs.com/package/hexo-butterfly-wowjs
+wowjs:
+  enable: true #控制动画开关。true是打开，false是关闭
+  priority: 10 #过滤器优先级
+  mobile: true #移动端是否启用，默认移动端禁用
+  animateitem:
+    - class: recent-post-item #必填项，需要添加动画的元素的class
+      style: animate__zoomIn #必填项，需要添加的动画
+      duration: 1.5s #选填项，动画持续时间，单位可以是ms也可以是s。例如3s，700ms。
+      delay: 200ms #选填项，动画开始的延迟时间，单位可以是ms也可以是s。例如3s，700ms。
+      offset: 30 #选填项，开始动画的距离（相对浏览器底部）
+      iteration: 1 #选填项，动画重复的次数
+    - class: card-widget
+      style: animate__zoomIn
+      delay: 200ms
+    # - class: flink-list-card
+    #   style: wowpanels
+    - class: flink-list-card
+      style: animate__flipInY
+      duration: 3s
+    - class: flink-list-card
+      style: animate__animated
+      duration: 3s
+    - class: article-sort-item
+      style: animate__slideInRight
+      duration: 1.5s
+    - class: site-card
+      style: animate__flipInY
+      duration: 3s
+    - class: site-card
+      style: animate__animated
+      duration: 3s
+  animate_css: https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css
+  wow_js: https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js
+  wow_init_js: https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js
