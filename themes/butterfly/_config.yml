@@ -18,7 +18,11 @@ nav:
   fixed: false
 
 menu:
-  # Home: / || fas fa-home
+   主页: / || fas fa-home
+   新闻: /archives || fas fa-archive
+   作品: /works || fas fa-briefcase
+   成员: /person || fas fa-address-book
+   关于: /about || fas fa-heart
   # List||fas fa-list:
   #   Music: /music/ || fas fa-music
   #   Movie: /movies/ || fas fa-video
