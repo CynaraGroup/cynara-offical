@@ -11,7 +11,7 @@
 
 nav:
   # Navigation bar logo image
-  logo:
+  logo: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/Cynara1.svg
   display_title: true
   display_post_title: true
   # Whether to fix navigation bar
@@ -33,8 +33,8 @@ menu:
 
 code_blocks:
   # Code block theme: darker / pale night / light / ocean / false
-  theme: light
-  macStyle: false
+  theme: pale night
+  macStyle: true
   # Code block height limit (unit: px)
   height_limit: false
   word_wrap: false
@@ -50,53 +50,53 @@ code_blocks:
 # Formal:
 #   icon: link || the description || color
 social:
-  # fab fa-github: https://github.com/xxxxx || Github || '#24292e'
-  # fas fa-envelope: mailto:xxxxxx@gmail.com || Email || '#4a7dbe'
+   fab fa-github: https://github.com/cynaragroup || Github || '#24292e'
+   fas fa-envelope: mailto:zhngjah3@outlook.com || Email || '#4a7dbe'
 
 # --------------------------------------
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.png
+favicon: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/Cynara1.svg
 
 avatar:
-  img: /img/butterfly-icon.png
+  img: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/Cynara1.svg
   effect: false
 
 # Disable all banner images
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img:
+default_top_img: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/index_bar.jpg
 
 # The banner image of index page
-index_img:
+index_img: https://pixiv.zhngjah.space/img-original/img/2013/11/06/07/06/09/39578544_p2.jpg
 
 # The banner image of archive page
-archive_img:
+archive_img: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/index_bar.jpg
 
 # Note: tag page, not tags page
-tag_img:
+tag_img: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/index_bar.jpg
 
 # The banner image of tag page, you can set the banner image for each tag
 # Format:
 #  - tag name: xxxxx
-tag_per_img:
+tag_per_img: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/index_bar.jpg
 
 # Note: category page, not categories page
-category_img:
+category_img: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/index_bar.jpg
 
 # The banner image of category page, you can set the banner image for each category
 # Format:
 #  - category name: xxxxx
-category_per_img:
+category_per_img: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/index_bar.jpg
 
 # The background image of footer
-footer_img: false
+footer_img: true
 
 # Website Background
 # Can set it to color or image url
-background:
+background: https://pixiv.zhngjah.space/img-original/img/2013/11/06/07/06/09/39578544_p2.jpg
 
 cover:
   # Disable the cover or not
