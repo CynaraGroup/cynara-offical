@@ -50,8 +50,8 @@ code_blocks:
 # Formal:
 #   icon: link || the description || color
 social:
-   fab fa-github: https://github.com/cynaragroup || Github || '#24292e'
-   fas fa-envelope: mailto:zhngjah3@outlook.com || Email || '#4a7dbe'
+   fas fa-briefcase: /works || 作品 || '#24292e'
+   fas fa-address-book: /person || 成员 || '#24292e'
 
 # --------------------------------------
 # Image Settings
@@ -70,7 +70,7 @@ disable_top_img: false
 default_top_img: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/index_bar.jpg
 
 # The banner image of index page
-index_img: https://pixiv.zhngjah.space/img-original/img/2013/11/06/07/06/09/39578544_p2.jpg
+index_img: https://pixiv.zhngjah.space/img-original/img/2024/07/04/08/21/57/120224003_p0.png
 
 # The banner image of archive page
 archive_img: https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/index_bar.jpg
@@ -96,7 +96,7 @@ footer_img: true
 
 # Website Background
 # Can set it to color or image url
-background: https://pixiv.zhngjah.space/img-original/img/2013/11/06/07/06/09/39578544_p2.jpg
+background: https://pixiv.zhngjah.space/img-original/img/2024/07/04/08/21/57/120224003_p0.png
 
 cover:
   # Disable the cover or not
@@ -114,7 +114,7 @@ error_img:
 
 # A simple 404 page
 error_404:
-  enable: false
+  enable: true
   subtitle: 'Page Not Found'
   background: /img/error-page.png
 
@@ -152,9 +152,9 @@ index_top_img_height:
 
 # The subtitle on homepage
 subtitle:
-  enable: false
+  enable: true
   # Typewriter Effect
-  effect: true
+  effect: false
   # Customize typed.js
   # https://github.com/mattboldt/typed.js/#customization
   typed_option:
@@ -168,6 +168,7 @@ subtitle:
   source: false
   # If you close the typewriter effect, the subtitle will only show the first line of sub
   sub:
+    汐奈工作室
 
 # Article layout on the homepage
 # 1: Cover on the left, info on the right
@@ -268,6 +269,7 @@ footer:
     enable: true
     version: true
   custom_text:
+    萌ICP备20250202号
 
 # --------------------------------------
 # Aside Settings
@@ -280,24 +282,24 @@ aside:
   button: true
   mobile: true
   # Position: left / right
-  position: right
+  position: left
   display:
-    archive: true
-    tag: true
-    category: true
+    archive: false
+    tag: false
+    category: false
   card_author:
     enable: true
-    description:
+    description: 汐奈工作室
     button:
       enable: true
       icon: fab fa-github
-      text: Follow Me
-      link: https://github.com/xxxxxx
+      text: Github
+      link: https://github.com/cynaragroup
   card_announcement:
     enable: true
     content: This is my Blog
   card_recent_post:
-    enable: true
+    enable: false
     # If set 0 will show all
     limit: 5
     # Sort: date / updated
@@ -311,14 +313,14 @@ aside:
     storage: 10
     avatar: true
   card_categories:
-    enable: true
+    enable: false
     # If set 0 will show all
     limit: 8
     # Choose: none / true / false
     expand: none
     sort_order:
   card_tags:
-    enable: true
+    enable: false
     # If set 0 will show all
     limit: 40
     color: false
@@ -328,7 +330,7 @@ aside:
     order: 1
     sort_order:
   card_archives:
-    enable: true
+    enable: false
     # Type: monthly / yearly
     type: monthly
     # Eg: YYYY年MM月
@@ -339,7 +341,7 @@ aside:
     limit: 8
     sort_order:
   card_post_series:
-    enable: true
+    enable: false
     # The title shows the series name
     series_title: false
     # Order by title or date
@@ -347,7 +349,7 @@ aside:
     # Sort of order. 1, asc for ascending; -1, desc for descending
     order: -1
   card_webinfo:
-    enable: true
+    enable: false
     post_count: true
     last_push_date: true
     sort_order:
@@ -382,7 +384,7 @@ readmode: true
 
 # Dark Mode
 darkmode:
-  enable: true
+  enable: false
   # Toggle Button to switch dark/light mode
   button: true
   # Switch dark/light mode automatically
@@ -441,9 +443,9 @@ wordcount:
 
 # Busuanzi count for PV / UV in site
 busuanzi:
-  site_uv: true
-  site_pv: true
-  page_pv: true
+  site_uv: false
+  site_pv: false
+  page_pv: false
 
 # --------------------------------------
 # Math
@@ -514,7 +516,7 @@ share:
   # Share.js
   # https://github.com/overtrue/share.js
   sharejs:
-    sites: facebook,twitter,wechat,weibo,qq
+    sites: twitter,wechat,weibo,qq
 
   # AddToAny
   # https://www.addtoany.com/
