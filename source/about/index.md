@@ -31,4 +31,10 @@ updated: '2025-07-17T23:48:06.217+08:00'
 
 #### 2024年
 
-* 重整 [MOEBBS](https://www.hvhbbs.cc/) 运营团队，论坛活跃度UPUP。
+* 2024年2月，梦之湾网络更名梦幻彼岸。
+* 2024年4月，重整 [MOEBBS](https://www.hvhbbs.cc/) 运营团队，论坛活跃度UPUP。
+* 2024年7月，梦幻彼岸更名Dreamily。
+
+#### 2025年
+
+* 2025年5月11日，Dreamily更名Cynara（汐奈工作室）。
