@@ -4,6 +4,7 @@ excerpt: ''
 title: 主要成员
 updated: '2025-07-18T22:00:39.151+08:00'
 ---
+{% raw %}
     <style>
         /* 成员卡片容器：网格布局 */
         .members-grid {
@@ -16,7 +17,7 @@ updated: '2025-07-18T22:00:39.151+08:00'
 
         /* 单个成员卡片样式 */
         .member-card {
-            background-color: #2a2a2a;
+            background-color: #ffffff;
             border-radius: 8px;
             padding: 24px;
             text-align: center;
@@ -24,7 +25,7 @@ updated: '2025-07-18T22:00:39.151+08:00'
         }
         .member-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 20px rgb(255, 255, 255);
         }
 
         /* 头像样式 - 修改为正方形 */
@@ -60,6 +61,7 @@ updated: '2025-07-18T22:00:39.151+08:00'
             margin-bottom: 8px;
             position: relative;
             display: inline-block;
+            color: black;
         }
         .member-name::after {
             content: "";
