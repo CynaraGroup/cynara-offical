@@ -32,12 +32,14 @@ Cynara由Cognition（认知）与 Nara（日语 “奈良”，温和意象）�
 * 2022年4月30日，[梦幻整合包](https://pack.fkme.cyou/#/) 发布，进入基岩版Minecraft市场。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/整合包.png)
 * 2022年7月，土豆团队成立，MC梦之湾与土豆服务器合并。
 * 2022年9月16日，[互通生存服务端](https://www.minebbs.com/resources/paper-new.4663/) 发布，开拓Java版Minecraft服务端市场。
-* 2022年12月，[MOEBBS](https://www.hvhbbs.cc/) 上线，开拓游戏论坛业务。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/MoeLogo.svg)
+* 2022年12月，梦之湾论坛上线，开拓游戏论坛业务。
+  ![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/xuanchuan.png)
 
 #### 2023年
 
 * 2023年3月，土豆团队更名梦之湾网络。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/small.png)
 * 2023年7月，梦幻云上线，开拓IDC业务。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/B78AC5C7E51E011FA4A9FF43EBD933F7.png)
+* 2023年9月，梦之湾论坛更名[MOEBBS](https://www.hvhbbs.cc/)。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/MoeLogo.svg)
 
 #### 2024年
 
