@@ -4,35 +4,7 @@ excerpt: ''
 title: 主要成员
 updated: '2025-07-18T22:00:39.151+08:00'
 ---
-{% raw %}
     <style>
-        /* 全局样式重置与基础设置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #1c1c1c; /* 深色背景 */
-            color: #fff;              /* 文字白色 */
-            font-family: "微软雅黑", sans-serif;
-            padding: 40px;
-        }
-
-        /* 标题区域样式 */
-        .member-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .member-title h2 {
-            font-size: 28px;
-            margin-bottom: 12px;
-        }
-        .member-title p {
-            font-size: 16px;
-            opacity: 0.8;
-        }
-
         /* 成员卡片容器：网格布局 */
         .members-grid {
             display: grid;
@@ -113,13 +85,6 @@ updated: '2025-07-18T22:00:39.151+08:00'
             color: #66bb6a;
         }
     </style>
-    <!-- 标题区域 -->
-    <div class="member-title">
-        <h2>主要工作室成员</h2>
-        <p>不分先后顺序</p>
-        <p>主要成员</p>
-    </div>
-
     <!-- 成员卡片容器 -->
     <div class="members-grid">
         <!-- 卡片1 -->
