@@ -96,6 +96,7 @@ updated: '2025-07-18T22:00:39.151+08:00'
                 <img src="http://q2.qlogo.cn/headimg_dl?dst_uin=1015000721&spec=100" alt="MhYa520">
             </div>
             <div class="member-name">MhYa520</div>
+            <p>创始人、论坛负责人、开发组组长</p>
             <!-- <a class="member-link" href="https://space.bilibili.com/1668014367" target="_blank">
                 https://space.bilibili.com/1668014367
             </a> -->
@@ -107,6 +108,7 @@ updated: '2025-07-18T22:00:39.151+08:00'
                 <img src="https://avatars.githubusercontent.com/u/93808231?v=4" alt="Sorasaku">
             </div>
             <div class="member-name">Sorasaku Yu</div>
+            <p>联合创始人、开发组副组长</p>
             <a class="member-link" href="www.zhngjah.space" target="_blank">
                 主页
             </a>
