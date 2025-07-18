@@ -1,7 +1,7 @@
 ---
 date: '2025-07-06T14:46:57+08:00'
 title: 关于我们
-updated: '2025-07-18T21:11:25.791+08:00'
+updated: '2025-07-18T21:20:24.632+08:00'
 ---
 # 关于我们
 
@@ -36,15 +36,15 @@ Cynara由Cognition（认知）与 Nara（日语 “奈良”，温和意象）�
 
 #### 2023年
 
-* 2023年3月，土豆团队更名梦之湾网络。
+* 2023年3月，土豆团队更名梦之湾网络。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/small.png)
 * 2023年7月，梦幻云上线，开拓IDC业务。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/B78AC5C7E51E011FA4A9FF43EBD933F7.png)
 
 #### 2024年
 
 * 2024年2月，梦之湾网络更名梦幻彼岸。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/梦幻彼岸小.svg)
 * 2024年4月，重整 [MOEBBS](https://www.hvhbbs.cc/) 运营团队，论坛活跃度UPUP。
-* 2024年7月，梦幻彼岸更名Dreamily。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/Dreamily.svg)
+* 2024年7月，梦幻彼岸更名Dreamily。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/23b44d97-3e96-436f-8c2d-d14b3d6c37b8.png)
 
 #### 2025年
 
-* 2025年5月11日，Dreamily更名Cynara（汐奈工作室）。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/Cynara.svg)![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/Cynara竖.svg)
+* 2025年5月11日，Dreamily更名Cynara（汐奈工作室）。![](https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/Cynara.svg)
