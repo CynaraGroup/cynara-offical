@@ -297,7 +297,7 @@ aside:
       link: https://github.com/cynaragroup
   card_announcement:
     enable: true
-    content: 我们正在招聘
+    content: 我们正在招聘，点击<a href='https://studio.zhngjah.space/posts/f1ef.html'>此处</a>了解
   card_recent_post:
     enable: false
     # If set 0 will show all
