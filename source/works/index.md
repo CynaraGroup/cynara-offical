@@ -349,7 +349,7 @@ aside: false
             <!-- MOEBBS -->
             <div class="portfolio-item" data-category="app">
                 <div class="portfolio-image">
-                    <img src="https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/MoeLogo - 小 - 512X.svg" alt="MOEBBS">
+                    <img src="https://cdn.jsdelivr.net/gh/CynaraGroup/PicBed/Cynara/MoeLogo - 小 - 512X.svg" alt="MOEBBS">
                 </div>
                 <div class="portfolio-content">
                     <h3>MOEBBS</h3>
@@ -362,7 +362,7 @@ aside: false
             <!-- 梦幻基岩包 -->
             <div class="portfolio-item" data-category="app">
                 <div class="portfolio-image">
-                    <img src="https://cdn.jsdelivr.net/gh/sorasakuyu/Pic/Cynara/%E6%95%B4%E5%90%88%E5%8C%85.png" alt="梦幻整合包">
+                    <img src="https://cdn.jsdelivr.net/gh/CynaraGroup/PicBed/Cynara/%E6%95%B4%E5%90%88%E5%8C%85.png" alt="梦幻整合包">
                 </div>
                 <div class="portfolio-content">
                     <h3>MOEBBS</h3>
