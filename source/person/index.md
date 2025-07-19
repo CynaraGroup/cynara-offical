@@ -165,7 +165,7 @@ updated: '2025-07-19T17:54:36.224+08:00'
       <p class="member-desc">去做吧，反正最后都会后悔</p>
       <div class="member-links">
         <a href="https://github.com/sorasakuyu" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-        <a href="mailto:zhngjah3@outlook.com" title="邮箱"><i class="fas fa-envelope"></i></a>
+        <a href="mailto:sorasaku@cynara.my" title="邮箱"><i class="fas fa-envelope"></i></a>
         <a href="https://zhngjah.space" target="_blank" title="博客"><i class="fas fa-blog"></i></a>
         <a href="https://x.com/zhngjah3" target="_blank" title="X"><i class="fab fa-twitter"></i></a>
       </div>
