@@ -22,6 +22,7 @@ menu:
    新闻: /archives || fas fa-archive
    作品: /works || fas fa-briefcase
    成员: /person || fas fa-address-book
+   赞助: /sponsor || fas fa-fist-raised
    关于: /about || fas fa-heart
   # List||fas fa-list:
   #   Music: /music/ || fas fa-music
@@ -52,6 +53,7 @@ code_blocks:
 social:
    fas fa-briefcase: /works || 作品 || '#24292e'
    fas fa-address-book: /person || 成员 || '#24292e'
+   fas fa-fist-raised: /sponsor ||赞助 || '#24292e'
 
 # --------------------------------------
 # Image Settings
