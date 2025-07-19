@@ -297,7 +297,7 @@ aside:
       link: https://github.com/cynaragroup
   card_announcement:
     enable: true
-    content: 伟大的想法在此相遇！我们正在招聘，点击<a href='https://studio.zhngjah.space/posts/f1ef.html'>此处</a>了解详情。
+    content: 伟大的想法在此相遇！我们正在招聘，点击<a href='./posts/posts/b9a.html'>此处</a>了解详情。
   card_recent_post:
     enable: false
     # If set 0 will show all
