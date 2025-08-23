@@ -20,8 +20,13 @@ nav:
 menu:
    主页: / || fas fa-home
    新闻: /archives || fas fa-archive
-   作品: /works || fas fa-briefcase
+  #  作品: /works || fas fa-briefcase
+   作品 || fas fa-briefcase:
+      Education: https://edu.cynara.my
+      MOEBBS: https://hvhbbs.cc/
+      梦幻整合包: https://pack.fkme.cyou/#/
    成员: /person || fas fa-address-book
+   监控: https://status.cynara.my/ || fas fa-spinner 
    赞助: /sponsor || fas fa-fist-raised
    关于: /about || fas fa-heart
   # List||fas fa-list:
