@@ -365,11 +365,37 @@ aside: false
                     <img src="https://cdn.jsdelivr.net/gh/CynaraGroup/PicBed/Cynara/%E6%95%B4%E5%90%88%E5%8C%85.png" alt="梦幻整合包">
                 </div>
                 <div class="portfolio-content">
-                    <h3>MOEBBS</h3>
+                    <h3>梦幻基岩包</h3>
                     <p>中国第一下载量</p>
                     <div class="portfolio-meta">
                         <a href="https://www.minebbs.com/resources/bassic.4034/" class="portfolio-link">基岩版<i class="fas fa-arrow-right"></i></a>
                         <a href="https://www.minebbs.com/resources/paper-new.4663/" class="portfolio-link">JAVA版<i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Education -->
+            <div class="portfolio-item" data-category="app">
+                <div class="portfolio-image">
+                    <img src="https://cdn.jsdelivr.net/gh/CynaraGroup/PicBed/Cynara/CynaraEducation%E7%AB%96.svg" alt="Education">
+                </div>
+                <div class="portfolio-content">
+                    <h3>Education</h3>
+                    <p>智顺授课，柔应课堂。</p>
+                    <div class="portfolio-meta">
+                        <a href="https://edu.cynara.my" class="portfolio-link">前往<i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- LayRain -->
+            <div class="portfolio-item" data-category="app">
+                <div class="portfolio-image">
+                    <img src="https://layrain.cynara.my/assist/img/logo.svg" alt="LayRain">
+                </div>
+                <div class="portfolio-content">
+                    <h3>LayRain</h3>
+                    <p>雷语一言系统，对标Hitokoto</p>
+                    <div class="portfolio-meta">
+                        <a href="https://layrain.cynara.my" class="portfolio-link">前往<i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
