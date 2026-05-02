@@ -116,8 +116,9 @@ const featuredProductsData = {
       const wrapper = document.getElementById('fullpageWrapper');
       const dots = document.querySelectorAll<HTMLButtonElement>('#pageDots button');
       const sections = document.querySelectorAll<HTMLElement>('.fullpage-section');
+      const shouldUseFullpage = window.matchMedia('(min-width: 768px)').matches;
 
-      if (wrapper instanceof HTMLElement) {
+      if (wrapper instanceof HTMLElement && shouldUseFullpage) {
         let currentIndex = 0;
         let isScrolling = false;
         let wheelTimeout: number | undefined;

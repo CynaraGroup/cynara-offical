@@ -29,6 +29,9 @@ importers:
       katex:
         specifier: ^0.16.45
         version: 0.16.45
+      pagefind:
+        specifier: ^1.5.2
+        version: 1.5.2
       rehype-katex:
         specifier: ^7.0.1
         version: 7.0.1
@@ -48,9 +51,6 @@ importers:
       '@astrojs/tailwind':
         specifier: ^5.1.0
         version: 5.1.5(astro@4.16.19(rollup@4.60.2)(typescript@5.9.3))(tailwindcss@3.4.19(yaml@2.8.4))
-      pagefind:
-        specifier: ^1.5.2
-        version: 1.5.2
       tailwindcss:
         specifier: ^3.4.0
         version: 3.4.19(yaml@2.8.4)

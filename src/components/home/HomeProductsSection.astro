@@ -27,21 +27,21 @@ const currentProducts = products[lang].slice(0, limit);
 ---
 
 <section class="fullpage-section flex items-center justify-center" data-index="2" id="section2">
-  <div class="max-w-7xl mx-auto px-6 w-full">
-    <div class="flex items-center justify-between gap-6 mb-12">
+  <div class="max-w-7xl mx-auto px-5 md:px-6 w-full">
+    <div class="flex flex-col-reverse items-start justify-between gap-4 mb-8 md:mb-12 md:flex-row md:items-center">
       <a
         href={productsRoute}
-        class="glass-btn inline-flex items-center gap-3 rounded-2xl px-6 py-3 text-sm font-semibold text-white/90 transition-all hover:scale-[1.03] hover:border-blue-300/40 hover:bg-blue-500/20"
+        class="glass-btn inline-flex items-center gap-3 rounded-2xl px-5 py-3 text-sm font-semibold text-white/90 transition-all hover:scale-[1.03] hover:border-blue-300/40 hover:bg-blue-500/20 md:px-6"
       >
         {lang === 'zh' ? '查看全部' : 'View all'}
         <span aria-hidden="true">→</span>
       </a>
-      <h2 class="text-4xl md:text-5xl font-bold text-white">{t(lang, 'products.title')}</h2>
+      <h2 class="text-3xl md:text-5xl font-bold text-white">{t(lang, 'products.title')}</h2>
     </div>
 
-    <div class="flex gap-8 items-center">
-      <div class="flex-1">
-        <div class="flex flex-col items-start justify-center gap-6">
+    <div class="flex flex-col gap-6 items-stretch lg:flex-row lg:items-center lg:gap-8">
+      <div class="lg:flex-1">
+        <div class="flex flex-col items-start justify-center gap-5 md:gap-6">
           <div class="flex items-center gap-4">
             <div id="product-small-icon" class="flex items-center justify-center">
               <img src={currentProducts[0].iconPath} alt="Product" class="w-16 h-16 object-contain" />
@@ -49,15 +49,15 @@ const currentProducts = products[lang].slice(0, limit);
             <h3 class="text-2xl font-bold text-white" id="product-name">{currentProducts[0].name}</h3>
           </div>
 
-          <p class="text-gray-300 text-lg leading-relaxed max-w-md" id="product-desc">{currentProducts[0].desc}</p>
+          <p class="text-gray-300 text-base leading-relaxed max-w-md md:text-lg" id="product-desc">{currentProducts[0].desc}</p>
 
-          <div class="product-links grid grid-cols-2 gap-3" id="product-links">
+          <div class="product-links grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:w-auto" id="product-links">
             {currentProducts[0].links.map((link) => (
               <a
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="glass-btn px-6 py-3 rounded-xl text-white font-medium hover:scale-105 transition-transform text-center"
+                class="glass-btn px-5 py-3 rounded-xl text-white font-medium hover:scale-105 transition-transform text-center md:px-6"
               >
                 {link.text}
               </a>
@@ -66,16 +66,16 @@ const currentProducts = products[lang].slice(0, limit);
         </div>
       </div>
 
-      <div class="flex-[3.5]">
+      <div class="lg:flex-[3.5]">
         <div class="aspect-video w-full rounded-2xl overflow-hidden bg-white/5" id="product-large-image">
           <img src={currentProducts[0].imagePath} alt="Product" class="w-full h-full object-cover" />
         </div>
       </div>
 
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-row gap-3 overflow-x-auto pb-1 lg:flex-col lg:gap-4 lg:overflow-visible lg:pb-0">
         {currentProducts.map((product, index) => (
           <button
-            class={`product-nav-btn ${index === 0 ? 'active' : ''} w-16 h-16 flex items-center justify-center hover:scale-105 transition-all`}
+            class={`product-nav-btn ${index === 0 ? 'active' : ''} h-14 w-14 flex-shrink-0 flex items-center justify-center hover:scale-105 transition-all md:h-16 md:w-16`}
             data-index={index}
           >
             <img src={product.iconPath} alt={`Product ${index + 1}`} class="w-8 h-8 object-contain" />

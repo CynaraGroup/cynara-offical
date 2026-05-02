@@ -11,21 +11,21 @@ const { lang, featuredArticles } = Astro.props;
 ---
 
 <section class="fullpage-section flex items-center justify-center" data-index="4" id="section4">
-  <div class="max-w-7xl mx-auto px-6 w-full">
-    <div class="flex items-center justify-between mb-10">
+  <div class="max-w-7xl mx-auto px-5 md:px-6 w-full">
+    <div class="flex flex-col items-start justify-between gap-4 mb-7 md:mb-10 sm:flex-row sm:items-center">
       <div>
-        <h2 class="text-4xl md:text-5xl font-bold text-white">
+        <h2 class="text-3xl md:text-5xl font-bold text-white">
           {lang === 'zh' ? '最新专栏' : 'Latest Articles'}
         </h2>
       </div>
-      <a href="/articles" class="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-7 py-3.5 text-base font-semibold text-white backdrop-blur-xl shadow-[0_18px_40px_rgba(0,0,0,0.26)] transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200/40 hover:bg-blue-400/20 hover:shadow-[0_22px_48px_rgba(59,130,246,0.22)]">
+      <a href="/articles" class="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-xl shadow-[0_18px_40px_rgba(0,0,0,0.26)] transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200/40 hover:bg-blue-400/20 hover:shadow-[0_22px_48px_rgba(59,130,246,0.22)] md:px-7 md:py-3.5 md:text-base">
         {lang === 'zh' ? '查看全部' : 'View all'}
       </a>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
       {featuredArticles.length > 0 ? featuredArticles.map((article) => (
-        <a href={`/articles/${article.slug}`} class="group glass-card rounded-3xl p-6 flex flex-col justify-between min-h-[20rem] hover:bg-white/5">
+        <a href={`/articles/${article.slug}`} class="group glass-card rounded-3xl p-5 flex flex-col justify-between min-h-0 hover:bg-white/5 md:min-h-[20rem] md:p-6">
           <div>
             <div class="flex items-center gap-3 text-xs text-gray-400 mb-4">
               <time datetime={article.data.pubDate.toISOString()}>
@@ -37,7 +37,7 @@ const { lang, featuredArticles } = Astro.props;
               </time>
               {article.data.author && <span>{article.data.author}</span>}
             </div>
-            <h3 class="text-2xl font-bold text-white leading-snug group-hover:text-blue-300 transition-colors">
+            <h3 class="text-xl font-bold text-white leading-snug group-hover:text-blue-300 transition-colors md:text-2xl">
               {article.data.title}
             </h3>
             {article.data.description && (

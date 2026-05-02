@@ -5,6 +5,7 @@ import robots from 'astro-robots';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { cynaraConfig } from './scripts/load-cynara-config.mjs';
+import cynaraBuildAssets from './scripts/astro-build-assets.mjs';
 
 export default defineConfig({
   site: cynaraConfig.site.url,
@@ -24,5 +25,6 @@ export default defineConfig({
         },
       ],
     }),
+    cynaraBuildAssets(),
   ],
 });
