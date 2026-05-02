@@ -89,7 +89,6 @@ const lang = getLang();
 <body>
   <div class="splash-container" id="splashContainer">
     <video id="splashVideo" autoplay muted playsinline>
-      <source src="https://s.mahiro.work/d/cynara-offical/begin.mp4?sign=EV_Zz9Q2oblkZSHcm0E6MI1ugKe9hM3DfCyFocXaekE=:0" type="video/mp4" />
     </video>
     <button class="skip-btn" id="skipBtn">跳过</button>
   </div>
@@ -98,6 +97,31 @@ const lang = getLang();
     const video = document.getElementById('splashVideo');
     const skipBtn = document.getElementById('skipBtn');
     const splashContainer = document.getElementById('splashContainer');
+    const videoUrl = 'https://s.mahiro.work/d/cynara-offical/begin.mp4?sign=EV_Zz9Q2oblkZSHcm0E6MI1ugKe9hM3DfCyFocXaekE=:0';
+
+    async function loadVideo() {
+      try {
+        const cache = await caches.open('cynara-video-cache');
+        let response = await cache.match(videoUrl);
+        
+        if (!response) {
+          response = await fetch(videoUrl);
+          if (response.ok) {
+            cache.put(videoUrl, response.clone());
+          }
+        }
+        
+        if (response && response.ok) {
+          const blob = await response.blob();
+          video.src = URL.createObjectURL(blob);
+        } else {
+          video.src = videoUrl;
+        }
+      } catch (err) {
+        video.src = videoUrl;
+      }
+    }
+    loadVideo();
 
     function enterHome() {
       splashContainer.classList.add('slide-up');
