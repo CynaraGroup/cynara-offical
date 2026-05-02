@@ -40,6 +40,8 @@ function runPagefind(distDir) {
 
 async function generateSitemap(distDir) {
   const entries = [];
+  const sitemapPath = path.join(distDir, 'sitemap.xml');
+  const sitemapIndexPath = path.join(distDir, 'sitemap-index.xml');
 
   function walk(currentDir) {
     const dirEntries = fs.readdirSync(currentDir, { withFileTypes: true });
@@ -77,7 +79,17 @@ async function generateSitemap(distDir) {
   sitemap.end();
 
   const xml = await streamToPromise(sitemap);
-  fs.writeFileSync(path.join(distDir, 'sitemap.xml'), xml.toString(), 'utf8');
+  fs.writeFileSync(sitemapPath, xml.toString(), 'utf8');
+
+  const sitemapIndex = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    `  <sitemap><loc>${cynaraConfig.site.url}/sitemap.xml</loc></sitemap>`,
+    '</sitemapindex>',
+    '',
+  ].join('\n');
+
+  fs.writeFileSync(sitemapIndexPath, sitemapIndex, 'utf8');
 }
 
 export default function cynaraBuildAssets() {
