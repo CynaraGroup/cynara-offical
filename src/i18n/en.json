@@ -1,0 +1,121 @@
+{
+  "nav": {
+    "home": "Home",
+    "intro": "Intro",
+    "about": "About",
+    "products": "Products",
+    "partners": "Partners",
+    "contact": "Contact"
+  },
+  "cta": {
+    "getInTouch": "Get in touch",
+    "sendMessage": "Send Message"
+  },
+  "hero": {
+    "title": "Innovating Software Systems",
+    "subtitle": "We build elegant, high-performance software solutions that power the future of technology.",
+    "exploreServices": "Explore Services",
+    "contactUs": "Contact Us"
+  },
+  "home": {
+    "whatWeDo": "What We Do",
+    "whatWeDoDesc": "Crafting software solutions with precision and creativity",
+    "customDev": "Custom Development",
+    "customDevDesc": "Tailored software solutions designed to meet your unique business requirements.",
+    "productDesign": "Product Design",
+    "productDesignDesc": "Intuitive user experiences and clean interfaces that users love.",
+    "systemArch": "System Architecture",
+    "systemArchDesc": "Scalable, robust architectures built for performance and growth.",
+    "beliefTitle": "We believe in the power of simple, well-crafted software.",
+    "beliefDesc": "Our approach combines technical excellence with thoughtful design, ensuring every solution we build is not just functional, but a joy to use.",
+    "learnMore": "Learn more about us",
+    "introTitle": "Introduction",
+    "introDesc": "CYNARA is an IT service group founded in 2022.",
+    "introDays": "We've been in this world for {days} days, but we're still young and growing.",
+    "introTech": "Technology",
+    "introTechDesc": "Cutting-edge technology driving innovation",
+    "introAesthetics": "Aesthetics",
+    "introAestheticsDesc": "Elegant design that pleases the eye",
+    "introHumanity": "Humanity",
+    "introHumanityDesc": "People-first, experience-focused",
+    "introInnovation": "Innovation",
+    "introInnovationDesc": "Continuous breakthroughs, pursuing excellence"
+  },
+  "about": {
+    "title": "About Us",
+    "p1": "Cynara is a studio focused on building innovative software systems. We work with forward-thinking companies to create solutions that drive real impact.",
+    "p2": "Founded on principles of simplicity and excellence, we approach every project with curiosity and dedication.",
+    "p3": "Our team brings together expertise in software engineering, product design, and system architecture.",
+    "values": "Our Values",
+    "valuesDesc": "Quality over quantity. Always.",
+    "approach": "Our Approach",
+    "approachDesc": "Collaborative, transparent, and focused on results."
+  },
+  "products": {
+    "title": "Our Products",
+    "entryBtn": "Get Started",
+    "product1": {
+      "name": "Cloud Intelligence Platform",
+      "desc": "Intelligent cloud management platform that provides one-stop cloud solutions for enterprises, including resource management, security monitoring, and data analysis.",
+      "shortDesc": "Intelligent cloud management platform"
+    },
+    "product2": {
+      "name": "Collaboration Space",
+      "desc": "Efficient team collaboration tool with real-time document editing, task management, and audio/video conferencing capabilities.",
+      "shortDesc": "Efficient team collaboration tool"
+    },
+    "product3": {
+      "name": "Data Insight",
+      "desc": "Intelligent data analysis platform providing visual reports, AI predictive analytics, and data mining capabilities.",
+      "shortDesc": "Intelligent data analysis platform"
+    }
+  },
+  "partners": {
+    "title": "Partners",
+    "description": "Want to collaborate with us? Feel free to"
+  },
+  "contact": {
+    "title": "Let's Talk",
+    "desc": "We'd love to hear about your project. Reach out and we'll get back to you soon.",
+    "email": "Email",
+    "name": "Name",
+    "message": "Message"
+  },
+  "footer": {
+    "tagline": "Building innovative software systems for the future. We transform ideas into elegant, functional solutions.",
+    "nav": "Navigation",
+    "contact": "Contact",
+    "copyright": "© 2024 Cynara. All rights reserved."
+  },
+  "aboutSection": {
+    "title": "About Us",
+    "subtitle": "Dreams Never End",
+    "description": "We are Zhiyuan Guanghui Information Technology Co., Ltd. From humble beginnings to our current scale, we have always strived for progress.",
+    "timelineStart": "We have been in this world for",
+    "timelineDays": "days",
+    "timelineHours": "hours",
+    "timelineMinutes": "minutes",
+    "timelineSeconds": "seconds",
+    "timelineEnd": ".",
+    "journey": "Through ups and downs, everything is for the dream, for you.",
+    "social": "Official social media:",
+    "socialBilibili": "Bilibili Account",
+    "socialBlog": "Official Blog",
+    "joinUs": "Join Us (Email HR) |",
+    "contactUs": "Contact Us |",
+    "report": "Integrity Report",
+    "otherLinks": "Other Links",
+    "members": "Members List",
+    "membersDesc": "View team members",
+    "sponsors": "Sponsors List",
+    "sponsorsDesc": "Thank you for supporting us",
+    "icp": "津ICP备2025038348号 | This site supports IPv6 network",
+    "creditCode": "Unified Social Credit Code: 91120113MAEW1QAP6W",
+    "cdn": "This site is accelerated by Tencent Cloud EdgeOne CDN",
+    "copyright": "Copyright © 2016-2026 7GIT. All rights reserved.",
+    "company": "© Zhiyuan Guanghui Information Technology (Tianjin) Co., Ltd. All rights reserved.",
+    "imagesNote": "Some resources are from Pixiv. If there is any infringement, please contact us for removal.",
+    "detailLink": "Learn more from this page",
+    "detailLabel": "DETAILED INFORMATION"
+  }
+}

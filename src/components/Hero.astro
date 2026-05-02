@@ -1,0 +1,37 @@
+---
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<section class="relative h-screen flex items-center justify-center overflow-hidden">
+  <div class="relative z-10 flex flex-col items-center justify-center px-6">
+    <img
+      id="hero-logo"
+      src="/public/assets/images/cynara.svg"
+      alt="Cynara"
+      class="w-80 h-80 md:w-96 md:h-96 lg:w-[512px] lg:h-[512px] filter drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] drop-shadow-[0_0_60px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-out"
+    />
+  </div>
+  
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+    <svg class="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+    </svg>
+  </div>
+</section>
+
+<script>
+  const logo = document.getElementById('hero-logo');
+  if (logo) {
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX - window.innerWidth / 2) / 50;
+      const y = (e.clientY - window.innerHeight / 2) / 50;
+      logo.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+    });
+  }
+</script>

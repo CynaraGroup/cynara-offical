@@ -1,9 +1,21 @@
-.DS_Store
-Thumbs.db
-db.json
-*.log
+# build output
+dist/
+.astro/
+
+# dependencies
 node_modules/
-public/
-.deploy*/
-_multiconfig.yml
-.idea
+
+# logs
+*.log
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

@@ -1,0 +1,73 @@
+{
+  "nav": {
+    "home": "首页",
+    "intro": "介绍",
+    "about": "关于",
+    "products": "产品",
+    "partners": "合作伙伴",
+    "contact": "联系"
+  },
+  "home": {
+    "introTitle": "介绍",
+    "introDesc": "CYNARA，是一家成立于2022年的信息技术类服务团体。",
+    "introDays": "我们已经来到这个世界 {days} 天了，但我们仍然年轻，仍然在成长。",
+    "introTech": "科技",
+    "introTechDesc": "前沿技术驱动创新",
+    "introAesthetics": "美学",
+    "introAestheticsDesc": "优雅设计，赏心悦目",
+    "introHumanity": "人文",
+    "introHumanityDesc": "以人为本，关注体验",
+    "introInnovation": "创新",
+    "introInnovationDesc": "持续突破，追求卓越"
+  },
+  "products": {
+    "title": "产品",
+    "entryBtn": "立即体验",
+    "product1": {
+      "name": "Layrain",
+      "desc": "智能云管理平台，为企业提供一站式云解决方案，包含资源管理、安全监控、数据分析等核心功能。",
+      "shortDesc": "智能云管理平台"
+    },
+    "product2": {
+      "name": "协作空间",
+      "desc": "高效团队协作工具，支持实时文档编辑、任务管理、音视频会议，让团队协作更顺畅高效。",
+      "shortDesc": "高效团队协作工具"
+    },
+    "product3": {
+      "name": "数据洞察",
+      "desc": "智能数据分析平台，提供可视化报表、AI预测分析、数据挖掘等功能，助力企业数据驱动决策。",
+      "shortDesc": "智能数据分析平台"
+    }
+  },
+  "partners": {
+    "title": "合作伙伴",
+    "description": "与我们合作？欢迎",
+    "description2": "我们"
+  },
+  "aboutSection": {
+    "title": "关于",
+    "subtitle": "梦想 永无止境",
+    "description": "我们是Cynara。虽然我们默默无闻，但一直在为进步而努力。",
+    "timelineStart": "我们已经来到这个世界",
+    "timelineDays": "天",
+    "timelineHours": "时",
+    "timelineMinutes": "分",
+    "timelineSeconds": "秒",
+    "timelineEnd": "了。",
+    "journey": "梦想是看不到头的，因为它本来就没有尽头。",
+    "social": "官方社交媒体：",
+    "socialBilibili": "哔哩哔哩",
+    "socialDouyin": "抖音",
+    "socialX": "X",
+    "socialBlog": "官方博客",
+    "contactUs": "联系我们",
+    "otherLinks": "其他链接",
+    "members": "成员列表",
+    "membersDesc": "查看团队成员",
+    "sponsors": "赞助者列表",
+    "sponsorsDesc": "感谢选择支持我们",
+    "cdn": "本站由 腾讯云EdgeOne 提供CDN加速服务",
+    "copyright": "Copyright © 2022-2026 CYNARA. All rights reserved.",
+    "company": "© 汐奈工作室 保留所有权利。"
+  }
+}

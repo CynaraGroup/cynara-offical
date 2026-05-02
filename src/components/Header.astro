@@ -1,0 +1,209 @@
+---
+import { t, type Locale, locales } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<aside id="sidebar" class="fixed top-0 left-0 h-full w-0 md:w-24 lg:w-26 z-50 glass-sidebar">
+  <div class="h-full flex flex-col p-3 text-white">
+    <nav class="flex-1 space-y-1 pt-3">
+      <a href="/home" class="flex flex-col items-center gap-1 px-2 py-3 rounded-lg text-xs font-medium transition-all hover:bg-white/10">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        {t(lang, 'nav.home')}
+      </a>
+      <a href="/home#section1" class="nav-intro flex flex-col items-center gap-1 px-2 py-3 rounded-lg text-xs font-medium transition-all hover:bg-white/10">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {t(lang, 'nav.intro')}
+      </a>
+      <a href="/home#section2" class="nav-products flex flex-col items-center gap-1 px-2 py-3 rounded-lg text-xs font-medium transition-all hover:bg-white/10">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+        {t(lang, 'nav.products')}
+      </a>
+      <a href="/home#section3" class="nav-partners flex flex-col items-center gap-1 px-2 py-3 rounded-lg text-xs font-medium transition-all hover:bg-white/10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                {t(lang, 'nav.partners')}
+              </a>
+              <a href="/home#section4" class="nav-about flex flex-col items-center gap-1 px-2 py-3 rounded-lg text-xs font-medium transition-all hover:bg-white/10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                {t(lang, 'nav.about')}
+              </a>
+    </nav>
+
+<!--
+    <div class="pt-3 border-t border-white/10">
+      <div class="lang-switcher">
+        <button class="lang-toggle flex flex-col items-center gap-1 w-full px-2 py-3 rounded-lg text-xs font-medium transition-all hover:bg-white/10" id="langToggle">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+          </svg>
+          <span id="currentLang">{lang.toUpperCase()}</span>
+        </button>
+        <div class="lang-dropdown hidden mt-1 space-y-1" id="langDropdown">
+          {locales.map((l) => (
+            <button
+              class={`flex justify-center w-full px-2 py-2 rounded-lg text-xs font-medium transition-all ${l === lang ? 'bg-white/20' : 'hover:bg-white/10'}`}
+              data-lang={l}
+            >
+              {l.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+    -->
+  </div>
+</aside>
+
+<button id="mobileMenuBtn" class="md:hidden fixed top-4 left-4 z-50 p-3 glass-btn rounded-xl">
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+</button>
+
+<div id="mobileOverlay" class="md:hidden fixed inset-0 bg-black/50 z-40 hidden"></div>
+
+<script is:inline>
+  const sidebar = document.getElementById('sidebar');
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileOverlay = document.getElementById('mobileOverlay');
+  const langToggle = document.getElementById('langToggle');
+  const langDropdown = document.getElementById('langDropdown');
+
+  function toggleMobileMenu() {
+    sidebar.classList.toggle('w-24');
+    sidebar.classList.toggle('w-0');
+    mobileOverlay.classList.toggle('hidden');
+    document.body.classList.toggle('overflow-hidden');
+  }
+
+  function toggleLangDropdown() {
+    langDropdown.classList.toggle('hidden');
+  }
+
+  mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+  mobileOverlay.addEventListener('click', toggleMobileMenu);
+  langToggle.addEventListener('click', toggleLangDropdown);
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.lang-switcher') && !langDropdown.classList.contains('hidden')) {
+      langDropdown.classList.add('hidden');
+    }
+  });
+
+  document.querySelectorAll('[data-lang]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const lang = btn.dataset.lang;
+      
+      // 先关闭下拉菜单
+      langDropdown.classList.add('hidden');
+      
+      // 设置 cookie - 多种方式确保成功
+      document.cookie = `lang=${lang};path=/;max-age=31536000`;
+      document.cookie = `lang=${lang};path=/`;
+      
+      // 调试信息
+      console.log('=== Language Switch ===');
+      console.log('Selected language:', lang);
+      console.log('Cookie after setting:', document.cookie);
+      console.log('All cookies:', decodeURIComponent(document.cookie));
+      
+      // 使用 URL 参数作为备用方案，直接跳转到带参数的 URL
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('lang', lang);
+      
+      setTimeout(() => {
+        console.log('Redirecting to:', currentUrl.toString());
+        window.location.href = currentUrl.toString();
+      }, 50);
+    });
+  });
+
+  // 处理"介绍"按钮的点击
+  const navIntro = document.querySelector('.nav-intro');
+  if (navIntro) {
+    navIntro.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.location.pathname === '/home' || window.location.pathname === '/' || window.location.pathname === '') {
+        if (window.scrollToSection) {
+          window.scrollToSection(1);
+        } else {
+          const section = document.getElementById('section1');
+          if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        window.location.href = '/home#section1';
+      }
+    });
+  }
+
+  // 处理"产品"按钮的点击
+    const navProducts = document.querySelector('.nav-products');
+    if (navProducts) {
+      navProducts.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (window.location.pathname === '/home' || window.location.pathname === '/' || window.location.pathname === '') {
+          if (window.scrollToSection) {
+            window.scrollToSection(2);
+          } else {
+            const section = document.getElementById('section2');
+            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else {
+          window.location.href = '/home#section2';
+        }
+      });
+    }
+
+    // 处理"合作伙伴"按钮的点击
+    const navPartners = document.querySelector('.nav-partners');
+    if (navPartners) {
+      navPartners.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (window.location.pathname === '/home' || window.location.pathname === '/' || window.location.pathname === '') {
+          if (window.scrollToSection) {
+            window.scrollToSection(3);
+          } else {
+            const section = document.getElementById('section3');
+            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else {
+          window.location.href = '/home#section3';
+        }
+      });
+    }
+
+    // 处理"关于"按钮的点击
+    const navAbout = document.querySelector('.nav-about');
+    if (navAbout) {
+      navAbout.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (window.location.pathname === '/home' || window.location.pathname === '/' || window.location.pathname === '') {
+          if (window.scrollToSection) {
+            window.scrollToSection(4);
+          } else {
+            const section = document.getElementById('section4');
+            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else {
+          window.location.href = '/home#section4';
+        }
+      });
+    }
+</script>

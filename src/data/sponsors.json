@@ -1,0 +1,38 @@
+{
+  "zh": {
+    "premium": [
+      {
+        "avatar": "https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png?imageView2/1/w/240/h/240",
+        "name": "若命",
+        "date": "2024-01-16",
+        "amount": "￥10",
+        "message": "产品很棒，继续努力！"
+      }
+    ],
+    "regular": [
+      {
+        "name": "若命",
+        "date": "2024-01-16",
+        "amount": "¥10"
+      }
+    ]
+  },
+  "en": {
+    "premium": [
+      {
+        "avatar": "https://pic1.afdiancdn.com/default/avatar/avatar-yellow.png?imageView2/1/w/240/h/240",
+        "name": "若命",
+        "date": "2024-01-16",
+        "amount": "￥10",
+        "message": "产品很棒，继续努力！"
+      }
+    ],
+    "regular": [
+      {
+        "name": "若命",
+        "date": "2024-01-16",
+        "amount": "¥10"
+      }
+    ]
+  }
+}

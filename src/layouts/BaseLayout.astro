@@ -1,0 +1,51 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import { defaultLocale, type Locale } from '../i18n';
+
+interface Props {
+  title: string;
+  lang?: Locale;
+  showVideoBackground?: boolean;
+}
+
+const { title, lang = defaultLocale, showVideoBackground = false } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | Cynara</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="font-sans bg-black min-h-screen text-white antialiased overflow-hidden">
+    {showVideoBackground && (
+      <>
+        <video
+          class="fixed inset-0 w-full h-full object-cover z-0"
+          autoplay
+          muted
+          loop
+          playsinline
+        >
+          <source src="https://s.mahiro.work/d/cynara-offical/background.mp4?sign=D8_q45c4F6TUrFhKR1WJ6HWxX1eH8XR5JbyzIurMTqk=:0" type="video/mp4" />
+        </video>
+        <div class="fixed inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-0"></div>
+      </>
+    )}
+    
+    <div class="flex h-screen relative z-10">
+      <Header lang={lang} />
+      <main class="flex-1 ml-0 md:ml-24 lg:ml-26 overflow-hidden">
+        <div class="h-full">
+          <slot />
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
