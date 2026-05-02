@@ -669,6 +669,10 @@ html {
     padding-block: 2.25rem 1.25rem;
   }
 
+  #section5 {
+    padding-bottom: calc(9rem + env(safe-area-inset-bottom));
+  }
+
   #section1 > div {
     margin-block: auto;
   }
