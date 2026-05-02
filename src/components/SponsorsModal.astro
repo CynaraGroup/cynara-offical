@@ -1,6 +1,7 @@
 ---
 import { t, type Locale } from '../i18n';
 import sponsorsData from '../data/sponsors.json' assert { type: 'json' };
+import { cynaraConfig } from '../config/cynara';
 
 interface Props {
   lang: Locale;
@@ -8,7 +9,7 @@ interface Props {
   onClose: () => void;
 }
 
-const { lang, isOpen, onClose } = Astro.props;
+const { lang, isOpen } = Astro.props as Props;
 const sponsors = sponsorsData[lang];
 ---
 
@@ -37,7 +38,7 @@ const sponsors = sponsorsData[lang];
             ? '你的每一份支持，都会帮助我们持续优化产品与服务。' 
             : 'Every bit of your support helps us continuously improve our products and services.'}
         </p>
-        <a href="https://ifdian.net/a/cynara" target="_blank" rel="noopener noreferrer" class="inline-block glass-btn px-8 py-3 rounded-xl text-white font-medium hover:scale-105 transition-transform bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30">
+        <a href={cynaraConfig.external.sponsorUrl} target="_blank" rel="noopener noreferrer" class="inline-block glass-btn px-8 py-3 rounded-xl text-white font-medium hover:scale-105 transition-transform bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30">
           {lang === 'zh' ? '前往赞助' : 'Become a Sponsor'}
         </a>
       </div>

@@ -1,0 +1,63 @@
+---
+import type { Locale } from '../../i18n';
+import { t } from '../../i18n';
+
+interface PartnerItem {
+  name: string;
+  logo: string;
+  url: string;
+}
+
+interface Props {
+  lang: Locale;
+  partners: PartnerItem[];
+  limit: number;
+  partnersRoute: string;
+  contactEmail: string;
+}
+
+const { lang, partners, limit, partnersRoute, contactEmail } = Astro.props;
+const featuredPartners = partners.slice(0, limit);
+---
+
+<section class="fullpage-section flex items-center justify-center" data-index="3" id="section3">
+  <div class="max-w-7xl mx-auto px-6 w-full">
+    <div class="flex flex-col items-start gap-8">
+      <div class="flex w-full flex-col gap-4">
+        <div class="flex flex-wrap items-center justify-between gap-5">
+          <h2 class="text-4xl md:text-5xl font-bold text-white">{t(lang, 'partners.title')}</h2>
+          <a
+            href={partnersRoute}
+            class="glass-btn inline-flex items-center gap-3 rounded-2xl px-6 py-3 text-sm font-semibold text-white/90 transition-all hover:scale-[1.03] hover:border-blue-300/40 hover:bg-blue-500/20"
+          >
+            {lang === 'zh' ? '查看全部' : 'View all'}
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <p class="text-xl text-gray-300">
+          {t(lang, 'partners.description')}
+          <a href={`mailto:${contactEmail}`} class="hover:opacity-80">
+            Email
+          </a>
+          {t(lang, 'partners.description2')}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+        {featuredPartners.map((partner) => (
+          <a
+            href={partner.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="partner-card glass-card aspect-[4/3] rounded-2xl p-4 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-2xl relative overflow-hidden"
+          >
+            <img src={partner.logo} alt={partner.name} class="w-full h-full object-contain opacity-90" />
+            <div class="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <span class="text-white text-lg font-semibold text-center px-4">{partner.name}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

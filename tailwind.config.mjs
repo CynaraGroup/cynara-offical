@@ -12,5 +12,12 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('daisyui'),
+  ],
+  daisyui: {
+    themes: ["dark", "light", "dracula", "synthwave"],
+    darkTheme: "dark",
+  }
 }

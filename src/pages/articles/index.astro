@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { t, getLocaleFromUrl } from '../../i18n';
+import { cynaraConfig } from '../../config/cynara';
+
+const lang = getLocaleFromUrl(Astro.url);
+
+const allArticles = await getCollection('articles', ({ data }: any) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const sortedArticles = allArticles.sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout
+  title={t(lang, 'nav.articles')}
+  lang={lang}
+  showVideoBackground={true}
+  description={lang === 'zh' ? '浏览 Cynara 的全部文章、技术内容与最新更新。' : 'Browse all Cynara articles, technical writing, and latest updates.'}
+>
+  <div class="relative z-10 max-w-4xl mx-auto px-6 py-24" id="articlesPage">
+    <div class="mb-12" id="articles-hero">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{t(lang, 'nav.articles')}</h1>
+      <p class="text-xl text-gray-400">
+        {lang === 'zh' ? '在这里浏览全部文章，也可以直接搜索正文内容。' : 'Browse every article here, or search directly through full article content.'}
+      </p>
+    </div>
+
+    <section class="pagefind-shell pagefind-shell-minimal glass-card rounded-[2rem] p-4 md:p-5 mb-10 overflow-hidden" id="articles-search-panel" data-pagefind-ignore="all">
+      <div class="pagefind-search-frame">
+        <div id="pagefindSearch" class="pagefind-search-root"></div>
+      </div>
+
+      <p id="pagefindStatus" class="pagefind-status-copy mt-4 text-sm text-gray-500">
+        {lang === 'zh' ? '正在准备搜索…' : 'Preparing search...'}
+      </p>
+    </section>
+
+    <div class="grid gap-8" id="articles-list">
+      {sortedArticles.length > 0 ? sortedArticles.map((article: any) => (
+        <a href={`/articles/${article.slug}`} class="block group glass-card p-6 md:p-8 rounded-3xl transition-all duration-300 hover:bg-white/5 hover:scale-[1.02]">
+          <div class="flex flex-col gap-2">
+            <h2 class="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
+              {article.data.title}
+            </h2>
+            <div class="flex items-center gap-4 text-sm text-gray-400">
+              <time datetime={article.data.pubDate.toISOString()}>
+                {article.data.pubDate.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </time>
+              {article.data.author && (
+                <span class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  {article.data.author}
+                </span>
+              )}
+            </div>
+            {article.data.description && (
+              <p class="text-gray-300 mt-2 line-clamp-2">
+                {article.data.description}
+              </p>
+            )}
+            {article.data.tags && article.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2 mt-4">
+                {article.data.tags.map((tag: string) => (
+                  <span class="badge badge-outline rounded-full border-white/15 bg-white/5 px-3 py-3 text-xs text-gray-300 group-hover:border-blue-400/30 group-hover:bg-blue-500/20 group-hover:text-blue-200 transition-colors">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </a>
+      )) : (
+        <p class="text-gray-400 text-center py-12">
+          {lang === 'zh' ? '暂无文章' : 'No articles yet.'}
+        </p>
+      )}
+    </div>
+  </div>
+
+  <script is:inline define:vars={{ pagefindLang: lang, pagefindOptions: cynaraConfig.articles.search }}>
+    window.pagefindLang = pagefindLang;
+    window.pagefindOptions = pagefindOptions;
+  </script>
+  <script>
+    type PagefindWindow = Window & typeof globalThis & {
+      PagefindUI?: new (options: Record<string, unknown>) => unknown;
+      pagefindLang?: 'zh' | 'en';
+      pagefindOptions?: {
+        enabled: boolean;
+        excerptLength: number;
+        showImages: boolean;
+        showSubResults: boolean;
+      };
+    };
+
+    (() => {
+      const pagefindWindow = window as PagefindWindow;
+      const searchRoot = document.getElementById('pagefindSearch');
+      const statusEl = document.getElementById('pagefindStatus');
+
+      if (!searchRoot) {
+        return;
+      }
+
+      const setStatus = (message: string) => {
+        if (statusEl) {
+          statusEl.textContent = message;
+          statusEl.classList.remove('hidden');
+        }
+      };
+
+      const clearStatus = () => {
+        if (statusEl) {
+          statusEl.classList.add('hidden');
+        }
+      };
+
+      const onAssetsMissing = () => {
+        setStatus(
+          pagefindWindow.pagefindLang === 'zh'
+            ? '搜索索引尚未生成，请先执行一次构建。'
+            : 'Search assets are not available yet. Run a production build first.'
+        );
+      };
+
+      const initPagefind = () => {
+        if (!pagefindWindow.PagefindUI) {
+          onAssetsMissing();
+          return;
+        }
+
+        new pagefindWindow.PagefindUI({
+          element: '#pagefindSearch',
+          bundlePath: '/pagefind/',
+          showImages: pagefindWindow.pagefindOptions?.showImages ?? false,
+          showSubResults: pagefindWindow.pagefindOptions?.showSubResults ?? false,
+          excerptLength: pagefindWindow.pagefindOptions?.excerptLength ?? 6,
+          resetStyles: false,
+          translations: pagefindWindow.pagefindLang === 'zh'
+            ? {
+                placeholder: '搜索文章内容',
+                clear_search: '清除',
+                load_more: '加载更多',
+                search_label: '搜索文章',
+                filters_label: '筛选',
+                zero_results: '没有找到 “[SEARCH_TERM]” 的相关文章',
+                many_results: '找到 [COUNT] 条与 “[SEARCH_TERM]” 相关的结果',
+                one_result: '找到 1 条与 “[SEARCH_TERM]” 相关的结果',
+                alt_search: '文章搜索结果',
+              }
+            : {
+                placeholder: 'Search articles',
+                clear_search: 'Clear',
+                load_more: 'Load more',
+                search_label: 'Search articles',
+              },
+        });
+
+        window.setTimeout(() => {
+          const input = document.querySelector('.pagefind-ui__search-input');
+          if (input instanceof HTMLInputElement) {
+            input.autocomplete = 'off';
+            input.spellcheck = false;
+          }
+        }, 0);
+
+        clearStatus();
+      };
+
+      const styleLink = document.createElement('link');
+      styleLink.rel = 'stylesheet';
+      styleLink.href = '/pagefind/pagefind-ui.css';
+      styleLink.onerror = onAssetsMissing;
+      document.head.appendChild(styleLink);
+
+      const scriptEl = document.createElement('script');
+      scriptEl.src = '/pagefind/pagefind-ui.js';
+      scriptEl.onload = initPagefind;
+      scriptEl.onerror = onAssetsMissing;
+      document.body.appendChild(scriptEl);
+    })();
+  </script>
+</BaseLayout>

@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Layrain",
+    "nameEn": "Layrain",
+    "desc": "LayRain system is benchmarked against Hitokoto.",
+    "iconPath": "https://layrain.cynara.my/assist/img/logo.svg",
+    "imagePath": "/products/introduce/layrain.png",
+    "links": [
+      { "text": "Try now", "url": "https://layrain.cynara.my" },
+      { "text": "Open platform", "url": "https://dev.layrain.cynara.my" }
+    ]
+  }
+]

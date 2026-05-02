@@ -1,22 +1,8 @@
 ---
-import { defaultLocale, type Locale } from '../i18n';
+import { getLocaleFromUrl } from '../i18n';
+import { cynaraConfig } from '../config/cynara';
 
-function getLang(): Locale {
-  // 1. 先从 URL 参数获取
-  const url = new URL(Astro.request.url);
-  const langFromUrl = url.searchParams.get('lang');
-  if (langFromUrl === 'zh' || langFromUrl === 'en') {
-    return langFromUrl;
-  }
-  
-  // 2. 再从 cookie 获取
-  const cookies = Astro.request.headers.get('cookie') || '';
-  const langCookie = cookies.split(';').find(c => c.trim().startsWith('lang='));
-  const lang = langCookie ? langCookie.split('=')[1] : defaultLocale;
-  return (lang === 'zh' || lang === 'en') ? lang : defaultLocale;
-}
-
-const lang = getLang();
+const lang = getLocaleFromUrl(Astro.url);
 ---
 
 <!DOCTYPE html>
@@ -24,7 +10,7 @@ const lang = getLang();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cynara</title>
+  <title>{cynaraConfig.site.name}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -88,52 +74,54 @@ const lang = getLang();
 </head>
 <body>
   <div class="splash-container" id="splashContainer">
-    <video id="splashVideo" autoplay muted playsinline>
-    </video>
+    <video id="splashVideo" autoplay muted playsinline></video>
     <button class="skip-btn" id="skipBtn">跳过</button>
   </div>
 
-  <script is:inline>
+  <script is:inline define:vars={{ videoUrl: cynaraConfig.assets.introVideo, videoCacheName: cynaraConfig.assets.videoCacheName, homeRoute: cynaraConfig.routes.home }}>
     const video = document.getElementById('splashVideo');
     const skipBtn = document.getElementById('skipBtn');
     const splashContainer = document.getElementById('splashContainer');
-    const videoUrl = 'https://s.mahiro.work/d/cynara-offical/begin.mp4?sign=EV_Zz9Q2oblkZSHcm0E6MI1ugKe9hM3DfCyFocXaekE=:0';
-
     async function loadVideo() {
       try {
-        const cache = await caches.open('cynara-video-cache');
-        let response = await cache.match(videoUrl);
-        
-        if (!response) {
-          response = await fetch(videoUrl);
-          if (response.ok) {
-            cache.put(videoUrl, response.clone());
-          }
-        }
-        
+        const cache = await caches.open(videoCacheName);
+        const response = await cache.match(videoUrl);
+
         if (response && response.ok) {
           const blob = await response.blob();
           video.src = URL.createObjectURL(blob);
         } else {
+          video.crossOrigin = 'anonymous';
           video.src = videoUrl;
+
+          setTimeout(() => {
+            fetch(videoUrl, {
+              referrerPolicy: 'no-referrer'
+            }).then((res) => {
+              if (res.ok) {
+                cache.put(videoUrl, res.clone());
+              }
+            }).catch(() => {});
+          }, 3000);
         }
       } catch (err) {
+        video.crossOrigin = 'anonymous';
         video.src = videoUrl;
       }
     }
+
     loadVideo();
 
     function enterHome() {
       splashContainer.classList.add('slide-up');
-      
-      // 保留 URL 语言参数
+
       const currentUrl = new URL(window.location.href);
-      const lang = currentUrl.searchParams.get('lang');
-      
+      const nextLang = currentUrl.searchParams.get('lang');
+
       setTimeout(() => {
-        let targetUrl = '/home';
-        if (lang) {
-          targetUrl += `?lang=${lang}`;
+        let targetUrl = homeRoute;
+        if (nextLang) {
+          targetUrl += `?lang=${nextLang}`;
         }
         window.location.href = targetUrl;
       }, 600);
@@ -141,10 +129,7 @@ const lang = getLang();
 
     video.addEventListener('ended', enterHome);
     skipBtn.addEventListener('click', enterHome);
-
-    video.addEventListener('error', () => {
-      enterHome();
-    });
+    video.addEventListener('error', enterHome);
   </script>
 </body>
 </html>

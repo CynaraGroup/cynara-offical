@@ -1,0 +1,75 @@
+# 站点基础信息：会影响页面标题、SEO meta、Open Graph、sitemap 等。
+site:
+  # 站点名称，会显示在 title、og:site_name、页脚 Logo 文案等位置。
+  name: Cynara
+  # 生产环境站点地址，不要以 / 结尾；用于 canonical、sitemap、robots。
+  url: https://cynara.my
+  # 默认页面描述；页面没有单独传 description 时使用这里。
+  description:
+    zh: Cynara 官方网站，展示产品、伙伴、专栏与团队动态。
+    en: Cynara official website featuring products, partners, articles, and team updates.
+  # SEO keywords，会被 BaseLayout 写入 meta keywords。
+  keywords:
+    - Cynara
+    - CynaraGroup
+    - Tech
+    - WebDev
+  # 默认分享图，支持绝对 URL 或站内路径。
+  defaultImage: https://i.mahiro.work/i/2026/05/02/11c1trl.svg
+  # 主 Logo，首页 Hero、Splash、Footer 等位置会使用。
+  logo: https://i.mahiro.work/i/2026/05/02/11c1trl.svg
+
+# 静态/远程资源：主要控制背景视频、开场视频和浏览器缓存名称。
+assets:
+  # 首页全屏背景视频。
+  backgroundVideo: https://s.mahiro.work/d/cynara-offical/output_min.mp4?sign=zuTiNw1EABHRU3cHhojuSRpHtxwG9XYuz6QwSX6CaAQ=:0
+  # 入口页/Splash 播放的视频。
+  introVideo: https://s.mahiro.work/d/cynara-offical/begin.mp4?sign=EV_Zz9Q2oblkZSHcm0E6MI1ugKe9hM3DfCyFocXaekE=:0
+  # Cache Storage 名称；换视频后可以改名强制刷新缓存。
+  videoCacheName: cynara-video-cache
+
+# 首页展示数量：控制首页只展示前 N 个，更多内容进入对应“查看全部”页面。
+home:
+  # 首页产品区展示数量。
+  featuredProducts: 5
+  # 首页合作伙伴区展示数量。
+  featuredPartners: 4
+  # 首页文章区展示数量；通常配合 articles.pinnedOnlyOnHome 使用。
+  featuredArticles: 3
+
+# 文章系统配置：控制首页置顶文章、搜索 UI、文章目录行为。
+articles:
+  # true 表示首页只展示 frontmatter 里 pin: true 的文章。
+  pinnedOnlyOnHome: true
+  search:
+    # 是否启用文章列表页的 Pagefind 搜索。
+    enabled: true
+    # 搜索结果摘要长度，数值越大结果卡片文字越长。
+    excerptLength: 6
+    # 是否在搜索结果中显示图片。
+    showImages: false
+    # 是否显示 Pagefind 子结果。
+    showSubResults: false
+  toc:
+    # 是否启用文章页右侧 TOC。
+    enabled: true
+    # 点击 TOC 跳转时距离顶部的偏移，避免标题被顶部区域遮住。
+    scrollOffset: 104
+
+# 路由配置：改这里后，已接入配置的导航和按钮会同步更新。
+routes:
+  home: /home
+  products: /products
+  partners: /partners
+  articles: /articles
+
+# 外部链接/联系方式：用于关于区、合作伙伴说明、赞助弹窗等位置。
+external:
+  # 主要联系邮箱。
+  contactEmail: zhngjah3@outlook.com
+  # 招聘/投稿等用途邮箱。
+  hiringEmail: sorasaku@cynara.my
+  # 赞助入口。
+  sponsorUrl: https://ifdian.net/a/cynara
+  # Bilibili 社交链接。
+  bilibiliUrl: https://space.bilibili.com/3706979616819218

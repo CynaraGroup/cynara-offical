@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Layrain",
+    "nameCn": "Layrain",
+    "desc": "雷语一言系统 对标Hitokoto",
+    "iconPath": "https://layrain.cynara.my/assist/img/logo.svg",
+    "imagePath": "/products/introduce/layrain.png",
+    "links": [
+        { "text": "立即体验", "url": "https://layrain.cynara.my" },
+        { "text": "开放平台", "url": "https://dev.layrain.cynara.my" }
+    ]
+  }
+]

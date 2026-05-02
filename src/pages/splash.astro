@@ -1,14 +1,8 @@
 ---
-import { defaultLocale, type Locale } from '../i18n';
+import { defaultLocale } from '../i18n';
+import { cynaraConfig } from '../config/cynara';
 
-function getLang(): Locale {
-  const cookies = Astro.request.headers.get('cookie') || '';
-  const langCookie = cookies.split(';').find(c => c.trim().startsWith('lang='));
-  const lang = langCookie ? langCookie.split('=')[1] : defaultLocale;
-  return (lang === 'zh' || lang === 'en') ? lang : defaultLocale;
-}
-
-const lang = getLang();
+const lang = defaultLocale;
 ---
 
 <!DOCTYPE html>
@@ -16,7 +10,7 @@ const lang = getLang();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cynara</title>
+  <title>{cynaraConfig.site.name}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -100,11 +94,11 @@ const lang = getLang();
 <body>
   <div class="splash-container">
     <video id="splashVideo" autoplay muted playsinline>
-      <source src="/assets/video/begin.mp4" type="video/mp4" />
+      <source src={cynaraConfig.assets.introVideo} type="video/mp4" />
     </video>
     <div class="logo-overlay">
-      <img src="/assets/images/logo.svg" alt="Cynara" />
-      <span>CYNARA</span>
+      <img src={cynaraConfig.site.logo} alt={cynaraConfig.site.name} />
+      <span>{cynaraConfig.site.name.toUpperCase()}</span>
     </div>
     <button class="skip-btn" id="skipBtn">跳过</button>
   </div>
@@ -119,10 +113,7 @@ const lang = getLang();
 
     video.addEventListener('ended', enterHome);
     skipBtn.addEventListener('click', enterHome);
-
-    video.addEventListener('error', () => {
-      enterHome();
-    });
+    video.addEventListener('error', enterHome);
   </script>
 </body>
 </html>

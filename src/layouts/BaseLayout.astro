@@ -1,16 +1,33 @@
 ---
 import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import 'katex/dist/katex.min.css';
 import { defaultLocale, type Locale } from '../i18n';
+import { cynaraConfig } from '../config/cynara';
 
 interface Props {
   title: string;
   lang?: Locale;
   showVideoBackground?: boolean;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
 }
 
-const { title, lang = defaultLocale, showVideoBackground = false } = Astro.props;
+const {
+  title,
+  lang = defaultLocale,
+  showVideoBackground = false,
+  description = cynaraConfig.site.description[lang],
+  image = cynaraConfig.site.defaultImage,
+  noindex = false,
+} = Astro.props;
+
+const siteUrl = Astro.site ?? new URL(cynaraConfig.site.url);
+const canonicalUrl = new URL(Astro.url.pathname + Astro.url.search, siteUrl).toString();
+const ogImageUrl = new URL(image, siteUrl).toString();
+const pageTitle = `${title} | ${cynaraConfig.site.name}`;
+const keywords = cynaraConfig.site.keywords.join(', ');
 ---
 
 <!DOCTYPE html>
@@ -18,7 +35,22 @@ const { title, lang = defaultLocale, showVideoBackground = false } = Astro.props
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title} | Cynara</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="robots" content={noindex ? 'noindex,nofollow' : 'index,follow,max-image-preview:large'} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={cynaraConfig.site.name} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <title>{pageTitle}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,25 +59,163 @@ const { title, lang = defaultLocale, showVideoBackground = false } = Astro.props
     {showVideoBackground && (
       <>
         <video
-          class="fixed inset-0 w-full h-full object-cover z-0"
+          id="bgVideo"
+          class="fixed inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000 opacity-0"
           autoplay
           muted
           loop
           playsinline
+          crossorigin="anonymous"
         >
-          <source src="https://s.mahiro.work/d/cynara-offical/background.mp4?sign=D8_q45c4F6TUrFhKR1WJ6HWxX1eH8XR5JbyzIurMTqk=:0" type="video/mp4" />
         </video>
         <div class="fixed inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-0"></div>
+        
+        <script is:inline define:vars={{ videoUrl: cynaraConfig.assets.backgroundVideo, videoCacheName: cynaraConfig.assets.videoCacheName }}>
+          // 使用 fetch 获取视频以避免浏览器的并发 Range 请求触发 S3 的 503 Slow Down
+          (async function loadBgVideo() {
+            const video = document.getElementById('bgVideo');
+            if (!video) return;
+            
+            try {
+              const cache = await caches.open(videoCacheName);
+              let response = await cache.match(videoUrl);
+              
+              if (!response || !response.ok) {
+                // 使用 fetch 拉取整个视频流（不使用分段请求），避免 503
+                response = await fetch(videoUrl, {
+                  referrerPolicy: "no-referrer"
+                });
+                
+                if (response.ok) {
+                  cache.put(videoUrl, response.clone());
+                }
+              }
+              
+              if (response && response.ok) {
+                const blob = await response.blob();
+                video.src = URL.createObjectURL(blob);
+                video.oncanplay = () => {
+                  video.classList.remove('opacity-0');
+                };
+              } else {
+                video.src = videoUrl;
+                video.classList.remove('opacity-0');
+              }
+            } catch (error) {
+              video.src = videoUrl;
+              video.classList.remove('opacity-0');
+            }
+          })();
+        </script>
       </>
     )}
     
     <div class="flex h-screen relative z-10">
       <Header lang={lang} />
-      <main class="flex-1 ml-0 md:ml-24 lg:ml-26 overflow-hidden">
+      <main class="app-scroll flex-1 ml-0 md:ml-24 lg:ml-26 overflow-x-hidden overflow-y-auto">
         <div class="h-full">
           <slot />
         </div>
       </main>
     </div>
+    <button
+      id="backToTop"
+      type="button"
+      class="back-to-top-btn btn btn-circle btn-sm md:btn-md fixed right-4 bottom-4 md:right-8 md:bottom-8 z-[70] border-white/15 bg-black/45 text-white opacity-0 pointer-events-none hover:border-blue-300/40 hover:bg-blue-500/20"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+      </svg>
+    </button>
+    <script>
+      import gsap from 'gsap';
+      import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+      gsap.registerPlugin(ScrollToPlugin);
+
+      const scrollContainer = document.querySelector<HTMLElement>('.app-scroll');
+      const backToTopButton = document.getElementById('backToTop');
+
+      if (scrollContainer && backToTopButton) {
+        let isVisible = false;
+        const articlePage = document.getElementById('articlePage');
+
+        if (articlePage) {
+          backToTopButton.classList.add('back-to-top-btn-article');
+          backToTopButton.setAttribute('aria-label', 'Article back to top');
+          backToTopButton.setAttribute('title', 'Back to top');
+        } else {
+          backToTopButton.classList.remove('back-to-top-btn-article');
+        }
+
+        gsap.set(backToTopButton, {
+          autoAlpha: 0,
+          y: 12,
+          scale: 0.94,
+          pointerEvents: 'none',
+        });
+
+        const showButton = () => {
+          if (isVisible) {
+            return;
+          }
+
+          isVisible = true;
+          backToTopButton.classList.add('is-visible');
+          gsap.to(backToTopButton, {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.28,
+            ease: 'power2.out',
+            pointerEvents: 'auto',
+            overwrite: true,
+          });
+        };
+
+        const hideButton = () => {
+          if (!isVisible) {
+            return;
+          }
+
+          isVisible = false;
+          backToTopButton.classList.remove('is-visible');
+          gsap.to(backToTopButton, {
+            autoAlpha: 0,
+            y: 12,
+            scale: 0.94,
+            duration: 0.24,
+            ease: 'power2.in',
+            pointerEvents: 'none',
+            overwrite: true,
+          });
+        };
+
+        const toggleButton = () => {
+          if (scrollContainer.scrollTop > 320) {
+            showButton();
+          } else {
+            hideButton();
+          }
+        };
+
+        scrollContainer.addEventListener('scroll', toggleButton, { passive: true });
+        toggleButton();
+
+        backToTopButton.addEventListener('click', () => {
+          gsap.to(scrollContainer, {
+            scrollTo: {
+              y: 0,
+              autoKill: true,
+            },
+            duration: 0.9,
+            ease: 'power3.out',
+            overwrite: true,
+          });
+        });
+      }
+    </script>
   </body>
 </html>

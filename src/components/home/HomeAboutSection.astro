@@ -1,0 +1,87 @@
+---
+import { t, type Locale } from '../../i18n';
+import AboutTimer from './AboutTimer.astro';
+import { cynaraConfig } from '../../config/cynara';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<section class="fullpage-section flex items-center justify-center" data-index="5" id="section5">
+  <div class="max-w-7xl mx-auto px-6 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+      <div class="lg:col-span-2">
+        <div class="glass-card p-8 rounded-3xl">
+          <div class="mb-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-2">{t(lang, 'aboutSection.title')}</h2>
+            <p class="text-gray-400 text-sm">{t(lang, 'aboutSection.subtitle')}</p>
+          </div>
+
+          <div class="space-y-6">
+            <p class="text-gray-300 text-lg leading-relaxed">
+              {t(lang, 'aboutSection.description')}
+            </p>
+
+            <AboutTimer lang={lang} />
+
+            <p class="text-gray-400 italic">
+              {t(lang, 'aboutSection.journey')}
+            </p>
+
+            <div class="space-y-4">
+              <p class="text-gray-300">
+                {t(lang, 'aboutSection.social')}
+                <a href={cynaraConfig.external.bilibiliUrl} class="hover:opacity-80 mx-1" target="_blank">
+                  {t(lang, 'aboutSection.socialBilibili')}
+                </a>
+              </p>
+
+              <div class="flex flex-wrap gap-2 text-gray-400 text-sm">
+                <a href={`mailto:${cynaraConfig.external.contactEmail}`} class="hover:opacity-80">
+                  {t(lang, 'aboutSection.contactUs')}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="glass-card p-6 rounded-2xl">
+          <h3 class="text-white font-semibold mb-4">{t(lang, 'aboutSection.otherLinks')}</h3>
+          <div class="space-y-3">
+            <a href="#" id="members-link" class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors group">
+              <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <div>
+                <p class="text-white text-sm font-medium">{t(lang, 'aboutSection.members')}</p>
+                <p class="text-gray-500 text-xs">{t(lang, 'aboutSection.membersDesc')}</p>
+              </div>
+            </a>
+            <a href="#" id="sponsors-link" class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors group">
+              <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              <div>
+                <p class="text-white text-sm font-medium">{t(lang, 'aboutSection.sponsors')}</p>
+                <p class="text-gray-500 text-xs">{t(lang, 'aboutSection.sponsorsDesc')}</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl">
+          <div class="space-y-3 text-xs text-gray-500">
+            <p>{t(lang, 'aboutSection.cdn')}</p>
+            <p class="pt-2 border-t border-white/10">{t(lang, 'aboutSection.copyright')}</p>
+            <p>{t(lang, 'aboutSection.company')}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

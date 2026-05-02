@@ -1,20 +1,14 @@
 ---
-import { t, type Locale } from '../i18n';
-
-interface Props {
-  lang: Locale;
-}
-
-const { lang } = Astro.props;
+import { cynaraConfig } from '../config/cynara';
 ---
 
 <section class="relative h-screen flex items-center justify-center overflow-hidden">
   <div class="relative z-10 flex flex-col items-center justify-center px-6">
     <img
       id="hero-logo"
-      src="/public/assets/images/cynara.svg"
-      alt="Cynara"
-      class="w-80 h-80 md:w-96 md:h-96 lg:w-[512px] lg:h-[512px] filter drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] drop-shadow-[0_0_60px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-out"
+      src={cynaraConfig.site.logo}
+      alt={cynaraConfig.site.name}
+      class="w-80 h-80 md:w-96 md:h-96 lg:w-[512px] lg:h-[512px] filter drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] drop-shadow-[0_0_60px_rgba(0,0,0,0.6)]"
     />
   </div>
   
@@ -26,12 +20,29 @@ const { lang } = Astro.props;
 </section>
 
 <script>
+  import gsap from "gsap";
+
   const logo = document.getElementById('hero-logo');
   if (logo) {
     document.addEventListener('mousemove', (e) => {
       const x = (e.clientX - window.innerWidth / 2) / 50;
       const y = (e.clientY - window.innerHeight / 2) / 50;
-      logo.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+      
+      gsap.to(logo, {
+        rotationY: x,
+        rotationX: -y,
+        transformPerspective: 1000,
+        ease: "power2.out",
+        duration: 0.5
+      });
+    });
+    
+    // 开局默认给一个浮动动画特效
+    gsap.from(logo, {
+      y: 30,
+      opacity: 0,
+      duration: 1.5,
+      ease: "power3.out"
     });
   }
 </script>
