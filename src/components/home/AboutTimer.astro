@@ -35,48 +35,67 @@ const initialSeconds = Math.floor((initialDiff % (1000 * 60)) / 1000);
 <script>
   import dayjs from 'dayjs';
 
-  const timers = document.querySelectorAll<HTMLElement>('[data-about-timer]');
+  const timerIntervals = new Map<HTMLElement, number>();
 
-  timers.forEach((timer) => {
-    if (timer.dataset.aboutTimerBound === 'true') {
-      return;
-    }
+  function clearAboutTimers() {
+    timerIntervals.forEach((intervalId) => {
+      window.clearInterval(intervalId);
+    });
+    timerIntervals.clear();
+  }
 
-    timer.dataset.aboutTimerBound = 'true';
+  function initAboutTimers() {
+    const timers = document.querySelectorAll<HTMLElement>('[data-about-timer]');
 
-    const startDate = timer.dataset.startDate;
-    if (!startDate) {
-      return;
-    }
-
-    const daysEl = timer.querySelector<HTMLElement>('[data-timer-part="days"]');
-    const hoursEl = timer.querySelector<HTMLElement>('[data-timer-part="hours"]');
-    const minutesEl = timer.querySelector<HTMLElement>('[data-timer-part="minutes"]');
-    const secondsEl = timer.querySelector<HTMLElement>('[data-timer-part="seconds"]');
-
-    if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
-      return;
-    }
-
-    const updateTimer = () => {
-      try {
-        const diff = Math.max(0, dayjs().diff(dayjs(startDate)));
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        daysEl.textContent = String(days);
-        hoursEl.textContent = String(hours);
-        minutesEl.textContent = String(minutes);
-        secondsEl.textContent = String(seconds);
-      } catch (error) {
-        console.error('About timer error:', error);
+    timers.forEach((timer) => {
+      const oldIntervalId = timerIntervals.get(timer);
+      if (oldIntervalId) {
+        window.clearInterval(oldIntervalId);
       }
-    };
 
-    updateTimer();
-    window.setInterval(updateTimer, 1000);
-  });
+      const startDate = timer.dataset.startDate;
+      if (!startDate) {
+        return;
+      }
+
+      const daysEl = timer.querySelector<HTMLElement>('[data-timer-part="days"]');
+      const hoursEl = timer.querySelector<HTMLElement>('[data-timer-part="hours"]');
+      const minutesEl = timer.querySelector<HTMLElement>('[data-timer-part="minutes"]');
+      const secondsEl = timer.querySelector<HTMLElement>('[data-timer-part="seconds"]');
+
+      if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+        return;
+      }
+
+      const updateTimer = () => {
+        try {
+          const diff = Math.max(0, dayjs().diff(dayjs(startDate)));
+
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+          daysEl.textContent = String(days);
+          hoursEl.textContent = String(hours);
+          minutesEl.textContent = String(minutes);
+          secondsEl.textContent = String(seconds);
+        } catch (error) {
+          console.error('About timer error:', error);
+        }
+      };
+
+      updateTimer();
+      timerIntervals.set(timer, window.setInterval(updateTimer, 1000));
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAboutTimers, { once: true });
+  } else {
+    initAboutTimers();
+  }
+
+  document.addEventListener('astro:page-load', initAboutTimers);
+  document.addEventListener('astro:before-swap', clearAboutTimers);
 </script>
