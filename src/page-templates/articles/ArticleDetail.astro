@@ -1,0 +1,247 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t, getLocalizedUrl } from '../../i18n';
+import { cynaraConfig } from '../../config/cynara';
+
+interface Props {
+  entry: CollectionEntry<'articles'>;
+  lang: any;
+}
+
+const { entry, lang } = Astro.props;
+const { Content, headings, remarkPluginFrontmatter } = await entry.render();
+const readingTimeMinutes: number = remarkPluginFrontmatter.readingTimeMinutes ?? 1;
+const tocHeadings = cynaraConfig.articles.toc.enabled
+  ? headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3)
+  : [];
+
+// Prev / Next articles
+const allArticles = await getCollection('articles', ({ data }: any) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+const sortedArticles = allArticles.sort(
+  (a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const currentIndex = sortedArticles.findIndex((a) => a.slug === entry.slug);
+const newerArticle = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
+const olderArticle = currentIndex < sortedArticles.length - 1 ? sortedArticles[currentIndex + 1] : null;
+
+// Related articles (by shared tags, max 3, exclude self)
+const currentTags = entry.data.tags ?? [];
+const relatedArticles = currentTags.length > 0
+  ? sortedArticles
+      .filter((a: any) => a.slug !== entry.slug && (a.data.tags ?? []).some((t: string) => currentTags.includes(t)))
+      .slice(0, 3)
+  : [];
+
+// JSON-LD structured data
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: entry.data.title,
+  description: entry.data.description ?? '',
+  datePublished: entry.data.pubDate.toISOString(),
+  author: entry.data.author
+    ? { '@type': 'Person', name: entry.data.author }
+    : { '@type': 'Organization', name: cynaraConfig.site.name },
+  publisher: {
+    '@type': 'Organization',
+    name: cynaraConfig.site.name,
+    url: cynaraConfig.site.url,
+    logo: { '@type': 'ImageObject', url: cynaraConfig.site.logo },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `${cynaraConfig.site.url}/articles/${entry.slug}/`,
+  },
+  image: cynaraConfig.site.defaultImage,
+  keywords: currentTags.join(', '),
+  wordCount: Math.round(readingTimeMinutes * 200),
+};
+---
+
+<BaseLayout
+  title={`${entry.data.title} - ${t(lang, 'nav.articles')}`}
+  lang={lang}
+  showVideoBackground={true}
+  description={entry.data.description ?? (lang === 'zh' ? '阅读 Cynara 的最新文章内容。' : 'Read the latest article from Cynara.')}
+>
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+
+  <!-- Reading progress bar -->
+  <div class="article-progress-bar" id="articleProgressBar"></div>
+
+  <article class="relative z-10 max-w-5xl mx-auto px-4 md:px-6 py-16 md:py-24 min-h-screen" id="articlePage" data-pagefind-body>
+    <div class="article-shell rounded-[2rem]">
+      <header class="article-header px-6 md:px-10 lg:px-14 pt-10 md:pt-14 pb-8 md:pb-10" id="article-header">
+        <div class="inline-flex items-center rounded-full border border-blue-400/20 bg-blue-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-blue-200">
+          {t(lang, 'nav.articles')}
+        </div>
+        <span class="sr-only" data-pagefind-meta="title">{entry.data.title}</span>
+        {entry.data.author && <span class="sr-only" data-pagefind-meta="author">{entry.data.author}</span>}
+        <h1 class="mt-6 text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
+          {entry.data.title}
+        </h1>
+        {entry.data.description && (
+          <p class="mt-5 max-w-3xl text-base md:text-lg leading-8 text-gray-300">
+            {entry.data.description}
+          </p>
+        )}
+        <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-400">
+          <time datetime={entry.data.pubDate.toISOString()} class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            {entry.data.pubDate.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </time>
+          {entry.data.author && (
+            <span class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              {entry.data.author}
+            </span>
+          )}
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {lang === 'zh' ? `阅读约 ${readingTimeMinutes} 分钟` : `${readingTimeMinutes} min read`}
+          </span>
+        </div>
+        {entry.data.tags && entry.data.tags.length > 0 && (
+          <div class="mt-6 flex flex-wrap gap-2">
+            {entry.data.tags.map((tag: string) => (
+              <a
+                href={getLocalizedUrl(`/articles/tag/${tag}`, lang)}
+                class="badge badge-outline rounded-full border-white/15 bg-white/5 px-3 py-3 text-sm text-gray-300 hover:border-blue-400/40 hover:bg-blue-500/20 hover:text-blue-200 transition-colors"
+                data-pagefind-meta="tag"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <div class="px-6 md:px-10 lg:px-14 py-10 md:py-12" id="article-body">
+        <div class={`article-body-layout ${tocHeadings.length > 0 ? 'article-body-layout-has-toc' : ''}`}>
+          <div class="article-content prose prose-invert prose-lg max-w-none">
+            <Content />
+          </div>
+
+          {tocHeadings.length > 0 && (
+            <aside class="article-toc-wrap" aria-label={lang === 'zh' ? '文章目录' : 'Table of contents'}>
+              <div class="article-toc-card">
+                <p class="article-toc-title">
+                  {lang === 'zh' ? '目录' : 'Contents'}
+                </p>
+                <nav class="article-toc-nav">
+                  <span class="article-toc-cursor" aria-hidden="true"></span>
+                  {tocHeadings.map((heading) => (
+                    <a
+                      href={`#${heading.slug}`}
+                      class={`article-toc-link ${heading.depth === 3 ? 'is-nested' : ''}`}
+                      data-toc-link={heading.slug}
+                    >
+                      {heading.text}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </aside>
+          )}
+        </div>
+      </div>
+
+      <footer class="px-6 md:px-10 lg:px-14 pb-10 md:pb-12 pt-2" id="article-footer">
+        <!-- Related articles -->
+        {relatedArticles.length > 0 && (
+          <div class="mb-8">
+            <h3 class="text-sm font-semibold uppercase tracking-[0.16em] text-blue-200/80 mb-4">
+              {lang === 'zh' ? '相关文章' : 'Related Articles'}
+            </h3>
+            <div class="grid gap-3">
+              {relatedArticles.map((related: any) => (
+                <a href={getLocalizedUrl(`/articles/${related.slug}`, lang)} class="article-nav-link group">
+                  <span class="article-nav-title">{related.data.title}</span>
+                  <span class="text-xs text-gray-500">
+                    {related.data.pubDate.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Prev / Next navigation -->
+        {(olderArticle || newerArticle) && (
+          <div class="article-prev-next mb-8">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {olderArticle ? (
+                <a href={getLocalizedUrl(`/articles/${olderArticle.slug}`, lang)} class="article-nav-link group">
+                  <span class="article-nav-label">{lang === 'zh' ? '← 上一篇' : '← Older'}</span>
+                  <span class="article-nav-title">{olderArticle.data.title}</span>
+                </a>
+              ) : <div />}
+              {newerArticle ? (
+                <a href={getLocalizedUrl(`/articles/${newerArticle.slug}`, lang)} class="article-nav-link article-nav-link-next group">
+                  <span class="article-nav-label">{lang === 'zh' ? '下一篇 →' : 'Newer →'}</span>
+                  <span class="article-nav-title">{newerArticle.data.title}</span>
+                </a>
+              ) : <div />}
+            </div>
+          </div>
+        )}
+
+        <a href={getLocalizedUrl(cynaraConfig.routes.articles, lang)} class="btn btn-ghost justify-start gap-2 px-0 text-gray-400 hover:bg-transparent hover:text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          {lang === 'zh' ? '返回文章列表' : 'Back to articles'}
+        </a>
+      </footer>
+    </div>
+  </article>
+
+  <!-- Mobile TOC drawer (only rendered when TOC headings exist) -->
+  {tocHeadings.length > 0 && (
+    <>
+      <button class="article-toc-mobile-btn" id="mobileTocBtn" type="button" aria-label={lang === 'zh' ? '打开目录' : 'Open table of contents'}>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h10M4 18h10" />
+        </svg>
+      </button>
+      <div class="article-toc-drawer-overlay" id="mobileTocOverlay"></div>
+      <div class="article-toc-drawer" id="mobileTocDrawer">
+        <p class="article-toc-title">{lang === 'zh' ? '目录' : 'Contents'}</p>
+        <nav class="article-toc-nav">
+          {tocHeadings.map((heading) => (
+            <a
+              href={`#${heading.slug}`}
+              class={`article-toc-link mobile-toc-link ${heading.depth === 3 ? 'is-nested' : ''}`}
+              data-toc-link={heading.slug}
+            >
+              {heading.text}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </>
+  )}
+
+  <script is:inline define:vars={{ tocScrollOffset: cynaraConfig.articles.toc.scrollOffset }}>
+    window.articleTocScrollOffset = tocScrollOffset;
+  </script>
+
+  <script>
+    import '../../scripts/articleToc';
+    import '../../scripts/articleEnhancements';
+  </script>
+</BaseLayout>

@@ -3,20 +3,66 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
 gsap.registerPlugin(ScrollToPlugin);
 
+type TocTarget = {
+  link: HTMLAnchorElement;
+  target: HTMLElement;
+};
+
+type ArticleTocWindow = Window &
+  typeof globalThis & {
+    articleTocScrollOffset?: number;
+    articleTocAbortController?: AbortController;
+    articleTocScrollTween?: gsap.core.Tween | null;
+  };
+
+const articleWindow = window as ArticleTocWindow;
+
+const resetMobileToc = (
+  mobileTocButton: HTMLElement | null,
+  mobileTocOverlay: HTMLElement | null,
+  mobileTocDrawer: HTMLElement | null
+) => {
+  if (mobileTocButton) {
+    mobileTocButton.setAttribute('aria-expanded', 'false');
+    mobileTocButton.setAttribute('aria-controls', 'mobileTocDrawer');
+  }
+
+  if (!(mobileTocOverlay && mobileTocDrawer)) {
+    return;
+  }
+
+  gsap.killTweensOf([mobileTocOverlay, mobileTocDrawer]);
+  mobileTocOverlay.style.pointerEvents = 'none';
+  gsap.set(mobileTocOverlay, { autoAlpha: 0 });
+  gsap.set(mobileTocDrawer, { autoAlpha: 0, xPercent: 100 });
+};
+
 function initArticleToc() {
+  articleWindow.articleTocAbortController?.abort();
+  articleWindow.articleTocScrollTween?.kill();
+  articleWindow.articleTocScrollTween = null;
+
+  const abortController = new AbortController();
+  articleWindow.articleTocAbortController = abortController;
+  const { signal } = abortController;
+
   const articleScrollContainer = document.querySelector<HTMLElement>('.app-scroll');
   const articlePage = document.getElementById('articlePage');
   const articleBody = document.getElementById('article-body');
   const tocCard = document.querySelector<HTMLElement>('.article-toc-card');
   const tocWrap = document.querySelector<HTMLElement>('.article-toc-wrap');
-  const tocNav = document.querySelector<HTMLElement>('.article-toc-nav');
+  const tocNav = document.querySelector<HTMLElement>('.article-toc-wrap .article-toc-nav');
   const tocCursor = document.querySelector<HTMLElement>('.article-toc-cursor');
-  const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
-  const articleWindow = window as Window & typeof globalThis & {
-    articleTocScrollOffset?: number;
-  };
+  const desktopTocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.article-toc-wrap [data-toc-link]'));
+  const mobileTocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.article-toc-drawer [data-toc-link]'));
+  const tocLinks = [...desktopTocLinks, ...mobileTocLinks];
+  const mobileTocButton = document.getElementById('mobileTocBtn');
+  const mobileTocOverlay = document.getElementById('mobileTocOverlay');
+  const mobileTocDrawer = document.getElementById('mobileTocDrawer');
 
-  const tocTargets = tocLinks
+  resetMobileToc(mobileTocButton, mobileTocOverlay, mobileTocDrawer);
+
+  const tocTargets = desktopTocLinks
     .map((link) => {
       const slug = link.dataset.tocLink;
       if (!slug) {
@@ -30,7 +76,7 @@ function initArticleToc() {
 
       return { link, target };
     })
-    .filter((item): item is { link: HTMLAnchorElement; target: HTMLElement } => item !== null);
+    .filter((item): item is TocTarget => item !== null);
 
   if (!(articleScrollContainer && articlePage && articleBody && tocCard && tocWrap && tocTargets.length > 0)) {
     return;
@@ -38,9 +84,9 @@ function initArticleToc() {
 
   const scrollOffset = articleWindow.articleTocScrollOffset ?? 104;
   let activeId = '';
-  let scrollTween: gsap.core.Tween | null = null;
   let rafId = 0;
   let followMax = 0;
+  let mobileTocOpen = false;
   const moveTocCard = gsap.quickTo(tocCard, 'y', {
     duration: 0.72,
     ease: 'expo.out',
@@ -89,6 +135,69 @@ function initArticleToc() {
     moveTocCard(followMax * progress);
   };
 
+  const openMobileToc = () => {
+    if (!(mobileTocButton && mobileTocOverlay && mobileTocDrawer) || mobileTocOpen) {
+      return;
+    }
+
+    mobileTocOpen = true;
+    mobileTocButton.setAttribute('aria-expanded', 'true');
+    mobileTocOverlay.style.pointerEvents = 'auto';
+    gsap.killTweensOf([mobileTocOverlay, mobileTocDrawer]);
+
+    gsap.to(mobileTocOverlay, {
+      autoAlpha: 1,
+      duration: 0.24,
+      ease: 'power2.out',
+      overwrite: true,
+    });
+
+    gsap.fromTo(
+      mobileTocDrawer,
+      { autoAlpha: 1, xPercent: 100 },
+      {
+        autoAlpha: 1,
+        xPercent: 0,
+        duration: 0.42,
+        ease: 'power3.out',
+        overwrite: true,
+      }
+    );
+  };
+
+  const closeMobileToc = (immediate = false) => {
+    if (!(mobileTocButton && mobileTocOverlay && mobileTocDrawer)) {
+      return;
+    }
+
+    mobileTocOpen = false;
+    mobileTocButton.setAttribute('aria-expanded', 'false');
+    gsap.killTweensOf([mobileTocOverlay, mobileTocDrawer]);
+
+    if (immediate) {
+      resetMobileToc(mobileTocButton, mobileTocOverlay, mobileTocDrawer);
+      return;
+    }
+
+    gsap.to(mobileTocOverlay, {
+      autoAlpha: 0,
+      duration: 0.2,
+      ease: 'power2.in',
+      overwrite: true,
+      onComplete: () => {
+        mobileTocOverlay.style.pointerEvents = 'none';
+      },
+    });
+
+    gsap.to(mobileTocDrawer, {
+      autoAlpha: 0,
+      xPercent: 100,
+      duration: 0.32,
+      ease: 'power3.inOut',
+      overwrite: true,
+    });
+  };
+
   const keepActiveVisible = (link: HTMLAnchorElement) => {
     const cardRect = tocCard.getBoundingClientRect();
     const linkRect = link.getBoundingClientRect();
@@ -119,16 +228,26 @@ function initArticleToc() {
 
     tocTargets.forEach(({ link, target }) => {
       const isActive = target.id === nextId;
-      link.classList.toggle('is-active', isActive);
+      const linkedItems = tocLinks.filter((tocLink) => tocLink.dataset.tocLink === target.id);
+
+      linkedItems.forEach((tocLink) => {
+        tocLink.classList.toggle('is-active', isActive);
+        if (isActive) {
+          tocLink.setAttribute('aria-current', 'location');
+        } else {
+          tocLink.removeAttribute('aria-current');
+        }
+      });
 
       if (isActive) {
-        link.setAttribute('aria-current', 'location');
-        gsap.to(link, {
-          x: link.classList.contains('is-nested') ? 3 : 5,
-          color: '#eff6ff',
-          duration: 0.28,
-          ease: 'power3.out',
-          overwrite: true,
+        linkedItems.forEach((tocLink) => {
+          gsap.to(tocLink, {
+            x: tocLink.classList.contains('is-nested') ? 3 : 5,
+            color: '#eff6ff',
+            duration: 0.28,
+            ease: 'power3.out',
+            overwrite: true,
+          });
         });
 
         if (tocCursor && tocNav && moveCursorY && resizeCursor) {
@@ -146,12 +265,13 @@ function initArticleToc() {
 
         keepActiveVisible(link);
       } else {
-        link.removeAttribute('aria-current');
-        gsap.to(link, {
-          x: 0,
-          duration: 0.24,
-          ease: 'power2.out',
-          overwrite: true,
+        linkedItems.forEach((tocLink) => {
+          gsap.to(tocLink, {
+            x: 0,
+            duration: 0.24,
+            ease: 'power2.out',
+            overwrite: true,
+          });
         });
       }
     });
@@ -188,10 +308,10 @@ function initArticleToc() {
   };
 
   const scrollToTarget = (target: HTMLElement, slug: string, shouldUpdateHash = true) => {
-    scrollTween?.kill();
+    articleWindow.articleTocScrollTween?.kill();
     syncActiveLink(slug);
 
-    scrollTween = gsap.to(articleScrollContainer, {
+    articleWindow.articleTocScrollTween = gsap.to(articleScrollContainer, {
       scrollTo: {
         y: getTargetScrollTop(target),
         autoKill: true,
@@ -210,32 +330,53 @@ function initArticleToc() {
     });
   };
 
+  mobileTocButton?.addEventListener('click', openMobileToc, { signal });
+  mobileTocOverlay?.addEventListener('click', () => closeMobileToc(), { signal });
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key === 'Escape') {
+        closeMobileToc();
+      }
+    },
+    { signal }
+  );
+
   tocLinks.forEach((link) => {
-    link.addEventListener('click', (event) => {
-      const slug = link.dataset.tocLink;
-      if (!slug) {
-        return;
-      }
+    link.addEventListener(
+      'click',
+      (event) => {
+        const slug = link.dataset.tocLink;
+        if (!slug) {
+          return;
+        }
 
-      const target = document.getElementById(slug);
-      if (!target) {
-        return;
-      }
+        const target = document.getElementById(slug);
+        if (!target) {
+          return;
+        }
 
-      event.preventDefault();
-      scrollToTarget(target, slug);
-    });
+        event.preventDefault();
+        closeMobileToc();
+        scrollToTarget(target, slug);
+      },
+      { signal }
+    );
   });
 
-  articleScrollContainer.addEventListener('scroll', requestActiveUpdate, { passive: true });
+  articleScrollContainer.addEventListener('scroll', requestActiveUpdate, { passive: true, signal });
 
-  window.addEventListener('hashchange', () => {
-    const slug = decodeURIComponent(window.location.hash.replace(/^#/, ''));
-    const item = tocTargets.find(({ target }) => target.id === slug);
-    if (item) {
-      scrollToTarget(item.target, item.target.id, false);
-    }
-  });
+  window.addEventListener(
+    'hashchange',
+    () => {
+      const slug = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+      const item = tocTargets.find(({ target }) => target.id === slug);
+      if (item) {
+        scrollToTarget(item.target, item.target.id, false);
+      }
+    },
+    { signal }
+  );
 
   window.addEventListener(
     'resize',
@@ -243,7 +384,17 @@ function initArticleToc() {
       refreshFollowBounds();
       requestActiveUpdate();
     },
-    { passive: true }
+    { passive: true, signal }
+  );
+
+  document.addEventListener(
+    'astro:before-swap',
+    () => {
+      closeMobileToc(true);
+      articleWindow.articleTocScrollTween?.kill();
+      abortController.abort();
+    },
+    { once: true, signal }
   );
 
   const initialSlug = decodeURIComponent(window.location.hash.replace(/^#/, ''));
@@ -251,6 +402,10 @@ function initArticleToc() {
 
   if (initialTarget) {
     window.setTimeout(() => {
+      if (signal.aborted) {
+        return;
+      }
+
       refreshFollowBounds();
       scrollToTarget(initialTarget.target, initialTarget.target.id, false);
     }, 80);
@@ -260,5 +415,10 @@ function initArticleToc() {
   }
 }
 
-// 支持 View Transitions：每次页面加载都重新初始化 TOC
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initArticleToc, { once: true });
+} else {
+  initArticleToc();
+}
+
 document.addEventListener('astro:page-load', initArticleToc);

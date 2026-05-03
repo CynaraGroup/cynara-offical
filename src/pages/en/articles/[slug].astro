@@ -1,6 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import ArticleDetail from '../../page-templates/articles/ArticleDetail.astro';
+import ArticleDetail from '../../../page-templates/articles/ArticleDetail.astro';
 
 export async function getStaticPaths() {
   const articleEntries = await getCollection('articles');
@@ -16,4 +16,4 @@ interface Props {
 
 const { entry } = Astro.props;
 ---
-<ArticleDetail lang="zh" entry={entry} />
+<ArticleDetail lang="en" entry={entry} />

@@ -220,8 +220,8 @@ const lang = getLocaleFromUrl(Astro.url);
 
         setTimeout(function() {
           var targetUrl = homeRoute;
-          if (nextLang) {
-            targetUrl += '?lang=' + nextLang;
+          if (nextLang === 'en') {
+            targetUrl = '/en' + (homeRoute === '/' ? '' : homeRoute);
           }
           window.location.href = targetUrl;
         }, 500);

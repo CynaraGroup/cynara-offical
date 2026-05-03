@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import ArticleTag from '../../../page-templates/articles/tag/ArticleTag.astro';
+import ArticleTag from '../../../../page-templates/articles/tag/ArticleTag.astro';
 
 export async function getStaticPaths() {
   const allArticles = await getCollection('articles', ({ data }: any) => {
@@ -31,4 +31,4 @@ interface Props {
 
 const { tag, articles } = Astro.props;
 ---
-<ArticleTag lang="zh" tag={tag} articles={articles} />
+<ArticleTag lang="en" tag={tag} articles={articles} />

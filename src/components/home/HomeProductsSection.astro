@@ -51,13 +51,13 @@ const currentProducts = products[lang].slice(0, limit);
 
           <p class="text-gray-300 text-base leading-relaxed max-w-md md:text-lg" id="product-desc">{currentProducts[0].desc}</p>
 
-          <div class="product-links grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:w-auto" id="product-links">
+          <div class="product-links flex flex-wrap gap-3 w-full lg:w-auto" id="product-links">
             {currentProducts[0].links.map((link) => (
               <a
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="glass-btn px-5 py-3 rounded-xl text-white font-medium hover:scale-105 transition-transform text-center md:px-6"
+                class="glass-btn px-5 py-3 rounded-xl text-white font-medium hover:scale-105 transition-transform text-center md:px-6 whitespace-nowrap flex-1 sm:flex-none"
               >
                 {link.text}
               </a>

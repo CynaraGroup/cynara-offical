@@ -1,5 +1,5 @@
 ---
-import { t, type Locale } from '../i18n';
+import { t, getLocalizedUrl, type Locale } from '../i18n';
 import { cynaraConfig } from '../config/cynara';
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const homeRoute = cynaraConfig.routes.home;
+const homeRoute = getLocalizedUrl(cynaraConfig.routes.home, lang);
 ---
 
 <footer class="mt-24 py-16 border-t border-white/10">
@@ -30,7 +30,7 @@ const homeRoute = cynaraConfig.routes.home;
           <li><a href={`${homeRoute}#section2`} class="text-sm text-gray-400 hover:text-white transition-colors">{t(lang, 'nav.products')}</a></li>
           <li><a href={`${homeRoute}#section3`} class="text-sm text-gray-400 hover:text-white transition-colors">{t(lang, 'nav.partners')}</a></li>
           <li><a href={`${homeRoute}#section4`} class="text-sm text-gray-400 hover:text-white transition-colors">{t(lang, 'nav.about')}</a></li>
-          <li><a href="/contact" class="text-sm text-gray-400 hover:text-white transition-colors">{t(lang, 'nav.contact')}</a></li>
+          <li><a href={getLocalizedUrl('/contact', lang)} class="text-sm text-gray-400 hover:text-white transition-colors">{t(lang, 'nav.contact')}</a></li>
         </ul>
       </div>
       <div>

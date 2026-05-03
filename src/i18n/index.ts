@@ -17,17 +17,29 @@ export function isLocale(value: string | null | undefined): value is Locale {
 
 export function getLocaleFromUrl(input: string | URL): Locale {
   const url = typeof input === 'string' ? new URL(input, cynaraConfig.site.url) : input;
-  const lang = url.searchParams.get('lang');
-  return isLocale(lang) ? lang : defaultLocale;
+  const path = url.pathname;
+  if (path.startsWith('/en/') || path === '/en') {
+    return 'en';
+  }
+  return defaultLocale;
 }
 
 export function getLocalizedUrl(path: string, locale: Locale): string {
-  if (locale === defaultLocale) return path;
-  
-  // Use a dummy origin to easily parse the path and existing search params
   const url = new URL(path, 'http://dummy.com');
-  url.searchParams.set('lang', locale);
-  return `${url.pathname}${url.search}${url.hash}`;
+  let pathname = url.pathname;
+  
+  // Strip any existing language prefix
+  if (pathname.startsWith('/en/')) {
+    pathname = pathname.replace('/en/', '/');
+  } else if (pathname === '/en') {
+    pathname = '/';
+  }
+  
+  if (locale === 'en') {
+    pathname = pathname === '/' ? '/en' : `/en${pathname}`;
+  }
+  
+  return `${pathname}${url.search}${url.hash}`;
 }
 
 export function t(locale: Locale, key: string, params?: Record<string, string | number>): string {

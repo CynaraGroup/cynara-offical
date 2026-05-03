@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import { getLocaleFromUrl, t } from '../i18n';
+import { cynaraConfig } from '../config/cynara';
+
+interface Props { lang: any }
+const { lang } = Astro.props;
+---
+
+<BaseLayout
+  title={t(lang, 'nav.contact')}
+  lang={lang}
+  showVideoBackground={true}
+  description={lang === 'zh' ? '联系 Cynara 团队，了解合作与招聘信息。' : 'Get in touch with the Cynara team for collaboration and hiring.'}
+>
+  <main class="relative z-10 mx-auto min-h-screen max-w-4xl px-5 py-20 pb-32 md:px-6 md:py-24">
+    <div class="mb-9 md:mb-12">
+      <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">
+        {lang === 'zh' ? '联系我们' : 'Contact Us'}
+      </h1>
+      <p class="text-base leading-7 text-gray-400 md:text-xl max-w-2xl">
+        {lang === 'zh'
+          ? '如有任何问题或合作意向，欢迎通过以下方式联系我们。'
+          : "We'd love to hear from you. Reach out through any of the channels below."}
+      </p>
+    </div>
+
+    <div class="grid gap-4 md:gap-6 md:grid-cols-2">
+      <!-- General Contact -->
+      <a
+        href={`mailto:${cynaraConfig.external.contactEmail}`}
+        class="glass-card group flex items-start gap-5 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:bg-white/5 hover:scale-[1.02]"
+      >
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-500/15 border border-blue-400/20 text-blue-300">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-lg font-bold text-white mb-1 group-hover:text-blue-300 transition-colors">
+            {lang === 'zh' ? '一般咨询' : 'General Inquiry'}
+          </h2>
+          <p class="text-sm text-gray-400 mb-3">
+            {lang === 'zh' ? '产品咨询、技术支持或合作洽谈' : 'Product inquiries, technical support, or partnerships'}
+          </p>
+          <span class="text-sm font-medium text-blue-300/80">{cynaraConfig.external.contactEmail}</span>
+        </div>
+      </a>
+
+      <!-- Hiring -->
+      <a
+        href={`mailto:${cynaraConfig.external.hiringEmail}`}
+        class="glass-card group flex items-start gap-5 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:bg-white/5 hover:scale-[1.02]"
+      >
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-purple-500/15 border border-purple-400/20 text-purple-300">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-lg font-bold text-white mb-1 group-hover:text-purple-300 transition-colors">
+            {lang === 'zh' ? '招聘 / 投稿' : 'Careers / Submissions'}
+          </h2>
+          <p class="text-sm text-gray-400 mb-3">
+            {lang === 'zh' ? '加入我们或投递稿件' : 'Join our team or submit your work'}
+          </p>
+          <span class="text-sm font-medium text-purple-300/80">{cynaraConfig.external.hiringEmail}</span>
+        </div>
+      </a>
+
+      <!-- Bilibili -->
+      <a
+        href={cynaraConfig.external.bilibiliUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="glass-card group flex items-start gap-5 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:bg-white/5 hover:scale-[1.02]"
+      >
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-pink-500/15 border border-pink-400/20 text-pink-300">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-lg font-bold text-white mb-1 group-hover:text-pink-300 transition-colors">
+            {lang === 'zh' ? '哔哩哔哩' : 'Bilibili'}
+          </h2>
+          <p class="text-sm text-gray-400 mb-3">
+            {lang === 'zh' ? '关注我们的官方 B 站账号' : 'Follow our official Bilibili account'}
+          </p>
+          <span class="text-sm font-medium text-pink-300/80">
+            {lang === 'zh' ? '前往 Bilibili →' : 'Visit Bilibili →'}
+          </span>
+        </div>
+      </a>
+
+      <!-- Sponsor -->
+      <a
+        href={cynaraConfig.external.sponsorUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="glass-card group flex items-start gap-5 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:bg-white/5 hover:scale-[1.02]"
+      >
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-500/15 border border-amber-400/20 text-amber-300">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-lg font-bold text-white mb-1 group-hover:text-amber-300 transition-colors">
+            {lang === 'zh' ? '赞助支持' : 'Sponsor Us'}
+          </h2>
+          <p class="text-sm text-gray-400 mb-3">
+            {lang === 'zh' ? '在爱发电上支持我们的创作' : 'Support our work on Afdian'}
+          </p>
+          <span class="text-sm font-medium text-amber-300/80">
+            {lang === 'zh' ? '前往爱发电 →' : 'Visit Afdian →'}
+          </span>
+        </div>
+      </a>
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

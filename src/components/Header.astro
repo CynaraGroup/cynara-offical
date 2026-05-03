@@ -1,20 +1,19 @@
 ---
 import { t, type Locale } from '../i18n';
 import { cynaraConfig } from '../config/cynara';
+import { getLocalizedUrl } from '../i18n';
 
 interface Props {
   lang: Locale;
 }
 
 const { lang } = Astro.props;
-const homeRoute = cynaraConfig.routes.home;
+const homeRoute = getLocalizedUrl(cynaraConfig.routes.home, lang);
 
 // Calculate language toggle URL
 const targetLang = lang === 'zh' ? 'en' : 'zh';
 const targetLangLabel = lang === 'zh' ? 'EN' : '中文';
-const currentUrl = new URL(Astro.url);
-currentUrl.searchParams.set('lang', targetLang);
-const toggleHref = `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`;
+const toggleHref = getLocalizedUrl(Astro.url.pathname + Astro.url.search + Astro.url.hash, targetLang);
 ---
 
 <aside id="sidebar" class="fixed top-0 left-0 h-full w-0 md:w-24 lg:w-26 z-50 glass-sidebar">
@@ -69,33 +68,14 @@ const toggleHref = `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}
   </div>
 </aside>
 
-<button id="mobileMenuBtn" class="hidden">
-  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-  </svg>
-</button>
-
-<div id="mobileOverlay" class="hidden"></div>
+<div class="md:hidden fixed top-5 right-5 z-[60] flex items-center gap-3">
+  <a href={toggleHref} class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 border border-white/10 backdrop-blur-md text-white transition-all hover:bg-white/20 shadow-lg" data-astro-reload>
+    <span class="text-xs font-bold">{targetLangLabel}</span>
+  </a>
+</div>
 
 <script is:inline define:vars={{ homeRoute }}>
   const sidebar = document.getElementById('sidebar');
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const mobileOverlay = document.getElementById('mobileOverlay');
-
-  function toggleMobileMenu() {
-    sidebar.classList.toggle('w-24');
-    sidebar.classList.toggle('w-0');
-    mobileOverlay.classList.toggle('hidden');
-    document.body.classList.toggle('overflow-hidden');
-  }
-
-  if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-  }
-
-  if (mobileOverlay) {
-    mobileOverlay.addEventListener('click', toggleMobileMenu);
-  }
 
   function bindSectionNav(selector, index, fallbackId) {
     const link = document.querySelector(selector);
