@@ -56,18 +56,18 @@ const keywords = cynaraConfig.site.keywords.join(', ');
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#0f172a" />
     <link rel="alternate" type="application/rss+xml" title={`${cynaraConfig.site.name} RSS`} href="/rss.xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <ViewTransitions fallback="animate" />
   </head>
   <body class="font-sans bg-black min-h-screen text-white antialiased overflow-hidden">
     {showVideoBackground && (
       <>
-        <div class="fixed inset-0 z-0 bg-gradient-to-br from-[#0a0e1a] via-[#0d1117] to-[#0a0a12]" transition:persist="bgGradient"></div>
+        <div class="site-background-fallback fixed inset-0 z-0 bg-gradient-to-br from-[#0a0e1a] via-[#0d1117] to-[#0a0a12]" transition:persist="bgGradient"></div>
         <video
           id="bgVideo"
-          class="fixed inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000 opacity-0"
+          class="site-background-video fixed inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000 opacity-0"
           autoplay
           muted
           loop
@@ -76,54 +76,71 @@ const keywords = cynaraConfig.site.keywords.join(', ');
           transition:persist="bgVideo"
         >
         </video>
-        <div class="fixed inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-0" transition:persist="bgOverlay"></div>
-        
+        <div class="site-background-overlay fixed inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-0" transition:persist="bgOverlay"></div>
+
         <script is:inline define:vars={{ videoUrl: cynaraConfig.assets.backgroundVideo, videoCacheName: cynaraConfig.assets.videoCacheName }}>
           (function loadBgVideo() {
             var video = document.getElementById('bgVideo');
             if (!video) return;
 
-            // 视频已在播放中（View Transitions 持久化成功）→ 确保可见并跳过
-            if (video.readyState >= 3 || (video.currentTime > 0 && !video.paused)) {
-              video.classList.remove('opacity-0');
-              return;
-            }
-
-            // data-loaded 标记（已加载但可能暂停）
-            if (video.dataset.loaded === '1' && video.src) {
-              video.classList.remove('opacity-0');
-              video.play().catch(function() {});
-              return;
-            }
-
-            // 全局标记：防止并发加载
-            if (window.__bgVideoLoading) return;
-            window.__bgVideoLoading = true;
-
-            // 弱网 / 省流模式：跳过视频
-            var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            if (conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) {
-              window.__bgVideoLoading = false;
-              return;
-            }
-
-            function onReady() {
-              video.removeEventListener('canplaythrough', onReady);
+            function revealVideo() {
               video.classList.remove('opacity-0');
               video.dataset.loaded = '1';
               window.__bgVideoLoading = false;
             }
 
-            video.addEventListener('canplaythrough', onReady, { once: true });
+            function markVideoFailed() {
+              document.documentElement.classList.add('bg-video-failed');
+              window.__bgVideoLoading = false;
+            }
 
-            // 如果 video 已经有 src（blob URL 仍有效），只需要等 canplaythrough
-            if (video.src && video.src !== window.location.href) {
-              // src 已存在，可能是 persist 保留的。重新触发播放
-              video.load();
+            function tryPlay() {
+              try {
+                var playResult = video.play();
+                if (playResult && typeof playResult.catch === 'function') {
+                  playResult.catch(function() {});
+                }
+              } catch (error) {}
+            }
+
+            if (video.readyState >= 2 || (video.currentTime > 0 && !video.paused)) {
+              revealVideo();
+              tryPlay();
               return;
             }
 
-            // 优先从 Cache Storage 读取
+            if (video.dataset.loaded === '1' && video.src) {
+              revealVideo();
+              tryPlay();
+              return;
+            }
+
+            if (window.__bgVideoLoading) return;
+            window.__bgVideoLoading = true;
+
+            var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) {
+              markVideoFailed();
+              return;
+            }
+
+            video.addEventListener('loadeddata', function() {
+              revealVideo();
+              tryPlay();
+            }, { once: true });
+            video.addEventListener('canplay', function() {
+              revealVideo();
+              tryPlay();
+            }, { once: true });
+            video.addEventListener('playing', revealVideo, { once: true });
+            video.addEventListener('error', markVideoFailed, { once: true });
+
+            if (video.src && video.src !== window.location.href) {
+              video.load();
+              tryPlay();
+              return;
+            }
+
             if (typeof caches !== 'undefined') {
               caches.open(videoCacheName).then(function(cache) {
                 return cache.match(videoUrl).then(function(cached) {
@@ -137,20 +154,23 @@ const keywords = cynaraConfig.site.keywords.join(', ');
                 if (response && response.ok) {
                   return response.blob().then(function(blob) {
                     video.src = URL.createObjectURL(blob);
+                    tryPlay();
                   });
                 }
                 throw new Error('bad response');
               }).catch(function() {
                 video.src = videoUrl;
+                tryPlay();
               });
             } else {
               video.src = videoUrl;
+              tryPlay();
             }
           })();
         </script>
       </>
     )}
-    
+
     <div class="flex h-screen relative z-10">
       <Header lang={lang} />
       <main class="app-scroll flex-1 ml-0 md:ml-24 lg:ml-26 overflow-x-hidden overflow-y-auto">
@@ -262,7 +282,6 @@ const keywords = cynaraConfig.site.keywords.join(', ');
         });
       }
 
-      // 支持 View Transitions：每次页面加载（包括客户端导航）都重新初始化
       document.addEventListener('astro:page-load', initBackToTop);
     </script>
   </body>
