@@ -4,8 +4,10 @@ import mdx from '@astrojs/mdx';
 import robots from 'astro-robots';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import compress from '@playform/compress';
 import { cynaraConfig } from './scripts/load-cynara-config.mjs';
 import cynaraBuildAssets from './scripts/astro-build-assets.mjs';
+import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs';
 
 export default defineConfig({
   site: cynaraConfig.site.url,
@@ -22,7 +24,7 @@ export default defineConfig({
     ],
   },
   markdown: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkMath, remarkReadingTime],
     rehypePlugins: [rehypeKatex],
   },
   integrations: [
@@ -38,5 +40,12 @@ export default defineConfig({
       ],
     }),
     cynaraBuildAssets(),
+    compress({
+      CSS: true,
+      HTML: true,
+      Image: false,
+      JavaScript: true,
+      SVG: false,
+    }),
   ],
 });

@@ -64,6 +64,7 @@ const keywords = cynaraConfig.site.keywords.join(', ');
   <body class="font-sans bg-black min-h-screen text-white antialiased overflow-hidden">
     {showVideoBackground && (
       <>
+        <div class="fixed inset-0 z-0 bg-gradient-to-br from-[#0a0e1a] via-[#0d1117] to-[#0a0a12]" transition:persist="bgGradient"></div>
         <video
           id="bgVideo"
           class="fixed inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000 opacity-0"
@@ -72,44 +73,78 @@ const keywords = cynaraConfig.site.keywords.join(', ');
           loop
           playsinline
           crossorigin="anonymous"
+          transition:persist="bgVideo"
         >
         </video>
-        <div class="fixed inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-0"></div>
+        <div class="fixed inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-0" transition:persist="bgOverlay"></div>
         
         <script is:inline define:vars={{ videoUrl: cynaraConfig.assets.backgroundVideo, videoCacheName: cynaraConfig.assets.videoCacheName }}>
-          // 使用 fetch 获取视频以避免浏览器的并发 Range 请求触发 S3 的 503 Slow Down
-          (async function loadBgVideo() {
-            const video = document.getElementById('bgVideo');
+          (function loadBgVideo() {
+            var video = document.getElementById('bgVideo');
             if (!video) return;
-            
-            try {
-              const cache = await caches.open(videoCacheName);
-              let response = await cache.match(videoUrl);
-              
-              if (!response || !response.ok) {
-                // 使用 fetch 拉取整个视频流（不使用分段请求），避免 503
-                response = await fetch(videoUrl, {
-                  referrerPolicy: "no-referrer"
-                });
-                
-                if (response.ok) {
-                  cache.put(videoUrl, response.clone());
-                }
-              }
-              
-              if (response && response.ok) {
-                const blob = await response.blob();
-                video.src = URL.createObjectURL(blob);
-                video.oncanplay = () => {
-                  video.classList.remove('opacity-0');
-                };
-              } else {
-                video.src = videoUrl;
-                video.classList.remove('opacity-0');
-              }
-            } catch (error) {
-              video.src = videoUrl;
+
+            // 视频已在播放中（View Transitions 持久化成功）→ 确保可见并跳过
+            if (video.readyState >= 3 || (video.currentTime > 0 && !video.paused)) {
               video.classList.remove('opacity-0');
+              return;
+            }
+
+            // data-loaded 标记（已加载但可能暂停）
+            if (video.dataset.loaded === '1' && video.src) {
+              video.classList.remove('opacity-0');
+              video.play().catch(function() {});
+              return;
+            }
+
+            // 全局标记：防止并发加载
+            if (window.__bgVideoLoading) return;
+            window.__bgVideoLoading = true;
+
+            // 弱网 / 省流模式：跳过视频
+            var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) {
+              window.__bgVideoLoading = false;
+              return;
+            }
+
+            function onReady() {
+              video.removeEventListener('canplaythrough', onReady);
+              video.classList.remove('opacity-0');
+              video.dataset.loaded = '1';
+              window.__bgVideoLoading = false;
+            }
+
+            video.addEventListener('canplaythrough', onReady, { once: true });
+
+            // 如果 video 已经有 src（blob URL 仍有效），只需要等 canplaythrough
+            if (video.src && video.src !== window.location.href) {
+              // src 已存在，可能是 persist 保留的。重新触发播放
+              video.load();
+              return;
+            }
+
+            // 优先从 Cache Storage 读取
+            if (typeof caches !== 'undefined') {
+              caches.open(videoCacheName).then(function(cache) {
+                return cache.match(videoUrl).then(function(cached) {
+                  if (cached && cached.ok) return cached;
+                  return fetch(videoUrl, { referrerPolicy: 'no-referrer' }).then(function(res) {
+                    if (res.ok) cache.put(videoUrl, res.clone());
+                    return res;
+                  });
+                });
+              }).then(function(response) {
+                if (response && response.ok) {
+                  return response.blob().then(function(blob) {
+                    video.src = URL.createObjectURL(blob);
+                  });
+                }
+                throw new Error('bad response');
+              }).catch(function() {
+                video.src = videoUrl;
+              });
+            } else {
+              video.src = videoUrl;
             }
           })();
         </script>

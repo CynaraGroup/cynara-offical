@@ -25,7 +25,7 @@ const { lang, featuredArticles } = Astro.props;
 
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
       {featuredArticles.length > 0 ? featuredArticles.map((article) => (
-        <a href={`/articles/${article.slug}`} class="group glass-card rounded-3xl p-5 flex flex-col justify-between min-h-0 hover:bg-white/5 md:min-h-[20rem] md:p-6">
+        <a href={`/articles/${article.slug}`} transition:name={`article-card-${article.slug}`} class="group glass-card rounded-3xl p-5 flex flex-col justify-between min-h-0 hover:bg-white/5 md:min-h-[20rem] md:p-6">
           <div>
             <div class="flex items-center gap-3 text-xs text-gray-400 mb-4">
               <time datetime={article.data.pubDate.toISOString()}>

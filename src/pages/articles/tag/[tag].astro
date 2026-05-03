@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLocaleFromUrl, t } from '../../../i18n';
+import { cynaraConfig } from '../../../config/cynara';
+
+export async function getStaticPaths() {
+  const allArticles = await getCollection('articles', ({ data }: any) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  const tagSet = new Set<string>();
+  allArticles.forEach((article: any) => {
+    (article.data.tags ?? []).forEach((tag: string) => tagSet.add(tag));
+  });
+
+  return Array.from(tagSet).map((tag) => {
+    const filtered = allArticles
+      .filter((article: any) => (article.data.tags ?? []).includes(tag))
+      .sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    return {
+      params: { tag },
+      props: { tag, articles: filtered },
+    };
+  });
+}
+
+interface Props {
+  tag: string;
+  articles: any[];
+}
+
+const { tag, articles } = Astro.props;
+const lang = getLocaleFromUrl(Astro.url);
+---
+
+<BaseLayout
+  title={`#${tag} - ${t(lang, 'nav.articles')}`}
+  lang={lang}
+  showVideoBackground={true}
+  description={lang === 'zh' ? `包含标签「${tag}」的所有文章` : `All articles tagged with "${tag}"`}
+>
+  <div class="relative z-10 max-w-4xl mx-auto px-5 py-20 pb-32 md:px-6 md:py-24">
+    <div class="mb-9 md:mb-12">
+      <a href={cynaraConfig.routes.articles} class="mb-5 inline-flex text-sm font-semibold text-blue-200/80 hover:text-white">
+        ← {lang === 'zh' ? '返回文章列表' : 'Back to articles'}
+      </a>
+      <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">
+        <span class="text-blue-300">#{tag}</span>
+      </h1>
+      <p class="text-base leading-7 text-gray-400 md:text-xl">
+        {lang === 'zh'
+          ? `共 ${articles.length} 篇文章包含此标签`
+          : `${articles.length} article${articles.length === 1 ? '' : 's'} found with this tag`}
+      </p>
+    </div>
+
+    <div class="grid gap-4 md:gap-8">
+      {articles.map((article: any) => (
+        <a href={`/articles/${article.slug}`} class="block group glass-card p-5 md:p-8 rounded-3xl transition-all duration-300 hover:bg-white/5 hover:scale-[1.02]">
+          <div class="flex flex-col gap-2">
+            <h2 class="text-xl md:text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
+              {article.data.title}
+            </h2>
+            <div class="flex items-center gap-4 text-sm text-gray-400">
+              <time datetime={article.data.pubDate.toISOString()}>
+                {article.data.pubDate.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </time>
+              {article.data.author && (
+                <span class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  {article.data.author}
+                </span>
+              )}
+            </div>
+            {article.data.description && (
+              <p class="text-gray-300 mt-2 line-clamp-2">
+                {article.data.description}
+              </p>
+            )}
+            {article.data.tags && article.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2 mt-4">
+                {article.data.tags.map((t: string) => (
+                  <span class={`badge badge-outline rounded-full border-white/15 bg-white/5 px-3 py-3 text-xs text-gray-300 transition-colors ${t === tag ? 'border-blue-400/40 bg-blue-500/20 text-blue-200' : 'group-hover:border-blue-400/30 group-hover:bg-blue-500/20 group-hover:text-blue-200'}`}>
+                    #{t}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

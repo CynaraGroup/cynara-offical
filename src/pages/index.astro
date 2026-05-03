@@ -11,6 +11,9 @@ const lang = getLocaleFromUrl(Astro.url);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{cynaraConfig.site.name}</title>
+  <meta name="description" content={cynaraConfig.site.description.zh} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="theme-color" content="#000000" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -32,12 +35,15 @@ const lang = getLocaleFromUrl(Astro.url);
       width: 100%;
       height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      gap: 1.5rem;
     }
-    .splash-container.slide-up {
-      transform: translateY(-100%);
+    .splash-bg {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, #0d1525, #060609);
     }
     video {
       position: absolute;
@@ -49,87 +55,185 @@ const lang = getLocaleFromUrl(Astro.url);
       width: auto;
       height: auto;
       object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    video.is-ready {
+      opacity: 1;
+    }
+    .splash-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.4) 100%);
+      z-index: 1;
+    }
+    .splash-logo {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      transform: translateY(20px) scale(0.96);
+    }
+    .splash-logo img {
+      width: 80px;
+      height: 80px;
+      filter: drop-shadow(0 0 40px rgba(125, 200, 229, 0.3));
+    }
+    .splash-logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.35em;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
     }
     .skip-btn {
       position: fixed;
-      bottom: 40px;
-      right: 40px;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
       z-index: 100;
-      padding: 12px 32px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      font-size: 14px;
+      padding: 0.65rem 2rem;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.85rem;
       font-weight: 500;
+      font-family: 'Inter', sans-serif;
       border-radius: 9999px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      opacity: 0;
+      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+      letter-spacing: 0.08em;
     }
     .skip-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: white;
+    }
+    @media (max-width: 640px) {
+      .splash-logo img {
+        width: 60px;
+        height: 60px;
+      }
+      .splash-logo-text {
+        font-size: 1.15rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="splash-container" id="splashContainer">
+    <div class="splash-bg"></div>
     <video id="splashVideo" autoplay muted playsinline></video>
-    <button class="skip-btn" id="skipBtn">跳过</button>
+    <div class="splash-overlay"></div>
+    <div class="splash-logo" id="splashLogo">
+      <img src="/favicon.svg" alt={cynaraConfig.site.name} />
+      <span class="splash-logo-text">{cynaraConfig.site.name.toUpperCase()}</span>
+    </div>
+    <button class="skip-btn" id="skipBtn">
+      {lang === 'zh' ? '进入网站' : 'Enter Site'}
+    </button>
   </div>
 
   <script is:inline define:vars={{ videoUrl: cynaraConfig.assets.introVideo, videoCacheName: cynaraConfig.assets.videoCacheName, homeRoute: cynaraConfig.routes.home }}>
-    const video = document.getElementById('splashVideo');
-    const skipBtn = document.getElementById('skipBtn');
-    const splashContainer = document.getElementById('splashContainer');
-    async function loadVideo() {
-      try {
-        const cache = await caches.open(videoCacheName);
-        const response = await cache.match(videoUrl);
+    (function() {
+      var video = document.getElementById('splashVideo');
+      var skipBtn = document.getElementById('skipBtn');
+      var splashContainer = document.getElementById('splashContainer');
+      var logo = document.getElementById('splashLogo');
+      var isTransitioning = false;
 
-        if (response && response.ok) {
-          const blob = await response.blob();
-          video.src = URL.createObjectURL(blob);
+      /* ── Logo 入场动画（纯 CSS / requestAnimationFrame）── */
+      requestAnimationFrame(function() {
+        logo.style.transition = 'opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+        logo.style.opacity = '1';
+        logo.style.transform = 'translateY(0) scale(1)';
+
+        setTimeout(function() {
+          skipBtn.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          skipBtn.style.opacity = '1';
+          skipBtn.style.transform = 'translateX(-50%) translateY(0)';
+        }, 600);
+      });
+
+      /* ── 视频加载 ── */
+      function loadVideo() {
+        // 弱网检测
+        var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) {
+          return; // 弱网：不加载视频，只显示 logo + 渐变背景
+        }
+
+        video.addEventListener('canplaythrough', function() {
+          video.classList.add('is-ready');
+        }, { once: true });
+
+        if (typeof caches !== 'undefined') {
+          caches.open(videoCacheName).then(function(cache) {
+            return cache.match(videoUrl).then(function(cached) {
+              if (cached && cached.ok) return cached;
+              return fetch(videoUrl, { referrerPolicy: 'no-referrer' }).then(function(res) {
+                if (res.ok) cache.put(videoUrl, res.clone());
+                return res;
+              });
+            });
+          }).then(function(response) {
+            if (response && response.ok) {
+              return response.blob().then(function(blob) {
+                video.src = URL.createObjectURL(blob);
+              });
+            }
+            throw new Error('fail');
+          }).catch(function() {
+            video.crossOrigin = 'anonymous';
+            video.src = videoUrl;
+          });
         } else {
           video.crossOrigin = 'anonymous';
           video.src = videoUrl;
-
-          setTimeout(() => {
-            fetch(videoUrl, {
-              referrerPolicy: 'no-referrer'
-            }).then((res) => {
-              if (res.ok) {
-                cache.put(videoUrl, res.clone());
-              }
-            }).catch(() => {});
-          }, 3000);
         }
-      } catch (err) {
-        video.crossOrigin = 'anonymous';
-        video.src = videoUrl;
       }
-    }
 
-    loadVideo();
+      loadVideo();
 
-    function enterHome() {
-      splashContainer.classList.add('slide-up');
+      /* ── 超时保底：10 秒后自动进入首页 ── */
+      var autoEnterTimer = setTimeout(enterHome, 10000);
 
-      const currentUrl = new URL(window.location.href);
-      const nextLang = currentUrl.searchParams.get('lang');
+      /* ── 进入首页 ── */
+      function enterHome() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        clearTimeout(autoEnterTimer);
 
-      setTimeout(() => {
-        let targetUrl = homeRoute;
-        if (nextLang) {
-          targetUrl += `?lang=${nextLang}`;
-        }
-        window.location.href = targetUrl;
-      }, 600);
-    }
+        // 淡出动画
+        splashContainer.style.transition = 'opacity 0.5s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+        splashContainer.style.opacity = '0';
+        splashContainer.style.transform = 'scale(1.05)';
 
-    video.addEventListener('ended', enterHome);
-    skipBtn.addEventListener('click', enterHome);
-    video.addEventListener('error', enterHome);
+        var currentUrl = new URL(window.location.href);
+        var nextLang = currentUrl.searchParams.get('lang');
+
+        setTimeout(function() {
+          var targetUrl = homeRoute;
+          if (nextLang) {
+            targetUrl += '?lang=' + nextLang;
+          }
+          window.location.href = targetUrl;
+        }, 500);
+      }
+
+      video.addEventListener('ended', enterHome);
+      skipBtn.addEventListener('click', enterHome);
+      video.addEventListener('error', function() {
+        // 视频出错：3 秒后自动进入
+        setTimeout(enterHome, 3000);
+      });
+    })();
   </script>
 </body>
 </html>

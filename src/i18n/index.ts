@@ -21,12 +21,29 @@ export function getLocaleFromUrl(input: string | URL): Locale {
   return isLocale(lang) ? lang : defaultLocale;
 }
 
-export function t(locale: Locale, key: string): string {
+export function getLocalizedUrl(path: string, locale: Locale): string {
+  if (locale === defaultLocale) return path;
+  
+  // Use a dummy origin to easily parse the path and existing search params
+  const url = new URL(path, 'http://dummy.com');
+  url.searchParams.set('lang', locale);
+  return `${url.pathname}${url.search}${url.hash}`;
+}
+
+export function t(locale: Locale, key: string, params?: Record<string, string | number>): string {
   const keys = key.split('.');
   let value: any = translations[locale];
+  
   for (const k of keys) {
     value = value[k];
     if (!value) return key;
   }
+  
+  if (params && typeof value === 'string') {
+    return value.replace(/{(\w+)}/g, (match, paramKey) => {
+      return params[paramKey] !== undefined ? String(params[paramKey]) : match;
+    });
+  }
+  
   return value;
 }

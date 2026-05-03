@@ -8,6 +8,13 @@ interface Props {
 
 const { lang } = Astro.props;
 const homeRoute = cynaraConfig.routes.home;
+
+// Calculate language toggle URL
+const targetLang = lang === 'zh' ? 'en' : 'zh';
+const targetLangLabel = lang === 'zh' ? 'EN' : '中文';
+const currentUrl = new URL(Astro.url);
+currentUrl.searchParams.set('lang', targetLang);
+const toggleHref = `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`;
 ---
 
 <aside id="sidebar" class="fixed top-0 left-0 h-full w-0 md:w-24 lg:w-26 z-50 glass-sidebar">
@@ -50,6 +57,15 @@ const homeRoute = cynaraConfig.routes.home;
         {t(lang, 'nav.about')}
       </a>
     </nav>
+
+    <div class="mt-auto pt-4">
+      <a href={toggleHref} class="flex flex-col items-center gap-1 px-2 py-3 rounded-lg text-xs font-medium transition-all hover:bg-white/10 group" data-astro-reload>
+        <svg class="w-6 h-6 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+        </svg>
+        <span class="text-gray-400 group-hover:text-white transition-colors">{targetLangLabel}</span>
+      </a>
+    </div>
   </div>
 </aside>
 
