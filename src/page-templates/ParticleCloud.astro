@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const isZh = lang === 'zh';
+---
+
+<BaseLayout
+  title={isZh ? '跨性别骄傲旗和 LGBT+ 彩虹旗' : 'Transgender Pride Flag and LGBT+ Rainbow Flag'}
+  lang={lang}
+  showVideoBackground={false}
+  description={isZh ? '使用 Three.js 粒子绘制的跨性别骄傲旗和 LGBT+ 彩虹旗。' : 'A Three.js particle transgender pride flag and LGBT+ rainbow flag.'}
+>
+  <main class="particle-cloud-page particle-flag-page relative z-10 h-screen min-h-screen w-full overflow-hidden bg-black">
+    <div class="absolute inset-0" data-particle-cloud></div>
+    <div class="particle-flag-switcher" data-particle-flag-switcher>
+      <button class="particle-flag-option is-active" type="button" data-particle-flag="trans">
+        {isZh ? '跨性别骄傲旗' : 'Trans Pride'}
+      </button>
+      <button class="particle-flag-option" type="button" data-particle-flag="rainbow">
+        {isZh ? 'LGBT+ 彩虹旗' : 'LGBT+ Rainbow'}
+      </button>
+    </div>
+    <div class="particle-flag-reset-wrap">
+      <button class="particle-flag-reset-btn" type="button" data-particle-reset aria-label={isZh ? '恢复默认视角' : 'Reset View'}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span>{isZh ? '恢复视角' : 'Reset View'}</span>
+      </button>
+    </div>
+    <div class="particle-flag-controls" data-particle-controls>
+      <button class="particle-flag-control-btn" type="button" data-particle-prev aria-label={isZh ? '上一个动画' : 'Previous animation'}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <div class="particle-flag-mode">
+        <span data-particle-mode-title>{isZh ? '柔和波浪' : 'Soft Wave'}</span>
+        <small data-particle-mode-desc>{isZh ? '旗帜像布料一样轻轻起伏。' : 'The flag gently moves like soft fabric.'}</small>
+      </div>
+      <button class="particle-flag-control-btn" type="button" data-particle-next aria-label={isZh ? '下一个动画' : 'Next animation'}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="particle-flag-notice" data-pride-notice>
+      <div class="particle-flag-notice-card" role="dialog" aria-modal="true" aria-labelledby="prideNoticeTitle">
+        <p class="particle-flag-notice-kicker">{isZh ? '光影动画与内容提示' : 'Visual & Content Notice'}</p>
+        <h2 id="prideNoticeTitle">{isZh ? '在继续浏览前...' : 'Before you continue...'}</h2>
+        <div class="particle-flag-notice-text">
+          <p class="notice-poetic">
+            {isZh
+              ? '这是一片献给勇敢者的无垠星空。在这个由 3D 粒子交织的数字视界里，我们尝试将 LGBT+ 的璀璨彩虹与跨性别的骄傲，化作宇宙中自由流淌的光影。每一颗悬浮的粒子，都是一个不屈的灵魂；每一次色彩的交融，都在温柔地诉说寻找自我与拥抱真实的勇气。这不仅是一件数字艺术品，更是一封写给爱、包容与每一种独特灵魂的温柔情书。无论世界如何喧嚣，请在这片为你点亮的光影中相信：你重塑自我的历程，本身就是宇宙中最浪漫的奇迹。请永远确信，你生来即是绝色。'
+              : 'This is a boundless galaxy dedicated to the brave.Within this digital horizon woven from 3D particles, we transform the brilliant LGBT+ rainbow and transgender pride into light and shadow, flowing freely through the cosmos. Every suspended particle is an unyielding soul; every blending of colors gently whispers the courage of discovering oneself and embracing the truth.More than just a piece of digital art, this is a tender love letter to love, inclusivity, and every unique spirit. No matter how loud the world becomes, please pause within this light illuminated for you and believe: your journey of reshaping yourself is, in itself, the universes most romantic miracle.Always remember, you were born an absolute masterpiece.'}
+          </p>
+          <p class="notice-warning">
+            {isZh
+              ? '为呈现最深邃的沉浸体验，页面包含大量动态星尘、高对比度辉光与空间自转效果。若您对强烈的视觉运动或 3D 闪烁敏感，建议谨慎浏览。'
+              : 'To present the most profound immersive experience, this page contains extensive dynamic stardust, high-contrast glow, and spatial rotation effects. If you are sensitive to intense visual motion or 3D flicker, please proceed with gentle caution.'}
+          </p>
+        </div>
+        <div class="particle-flag-notice-actions">
+          <button class="particle-flag-notice-primary" type="button" data-pride-notice-accept>
+            {isZh ? '我已了解, 继续浏览' : 'I understand, Continue browsing'}
+          </button>
+          <a class="particle-flag-notice-secondary" href={isZh ? '/home' : '/en/home'}>
+            {isZh ? '暂不体验' : 'Not right now'}
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    import '../scripts/particleCloud';
+  </script>
+
+  <script is:inline>
+    (function initPrideNotice() {
+      var notice = document.querySelector('[data-pride-notice]');
+      var acceptButton = document.querySelector('[data-pride-notice-accept]');
+      if (!notice || !acceptButton) return;
+
+      acceptButton.addEventListener('click', function() {
+        notice.classList.add('is-hidden');
+      });
+    })();
+  </script>
+</BaseLayout>

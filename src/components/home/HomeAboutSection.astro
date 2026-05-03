@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { lang } = Astro.props;
+const prideEggUrl = getLocalizedUrl('/cloud', lang);
 ---
 
 <section class="fullpage-section flex items-center justify-center" data-index="5" id="section5">
@@ -87,7 +88,17 @@ const { lang } = Astro.props;
           <div class="space-y-3 text-xs text-gray-500">
             <p>{t(lang, 'aboutSection.cdn')}</p>
             <p class="pt-2 border-t border-white/10">{t(lang, 'aboutSection.copyright')}</p>
-            <p>{t(lang, 'aboutSection.company')}</p>
+            <p class="flex items-center gap-2">
+              <span>{t(lang, 'aboutSection.company')}</span>
+              <a
+                href={prideEggUrl}
+                class="pride-easter-egg"
+                aria-label={lang === 'zh' ? '隐藏彩蛋' : 'Hidden easter egg'}
+                title={lang === 'zh' ? '隐藏彩蛋' : 'Hidden easter egg'}
+              >
+                <span></span>
+              </a>
+            </p>
           </div>
         </div>
       </div>
