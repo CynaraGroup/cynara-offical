@@ -4,6 +4,7 @@ import '../styles/global.css';
 import 'katex/dist/katex.min.css';
 import { defaultLocale, type Locale } from '../i18n';
 import { cynaraConfig } from '../config/cynara';
+import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
   title: string;
@@ -51,9 +52,14 @@ const keywords = cynaraConfig.site.keywords.join(', ');
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
     <title>{pageTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="alternate" type="application/rss+xml" title={`${cynaraConfig.site.name} RSS`} href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <ViewTransitions fallback="animate" />
   </head>
   <body class="font-sans bg-black min-h-screen text-white antialiased overflow-hidden">
     {showVideoBackground && (
@@ -135,10 +141,14 @@ const keywords = cynaraConfig.site.keywords.join(', ');
 
       gsap.registerPlugin(ScrollToPlugin);
 
-      const scrollContainer = document.querySelector<HTMLElement>('.app-scroll');
-      const backToTopButton = document.getElementById('backToTop');
+      function initBackToTop() {
+        const scrollContainer = document.querySelector<HTMLElement>('.app-scroll');
+        const backToTopButton = document.getElementById('backToTop');
 
-      if (scrollContainer && backToTopButton) {
+        if (!scrollContainer || !backToTopButton) {
+          return;
+        }
+
         let isVisible = false;
         const articlePage = document.getElementById('articlePage');
 
@@ -216,6 +226,9 @@ const keywords = cynaraConfig.site.keywords.join(', ');
           });
         });
       }
+
+      // 支持 View Transitions：每次页面加载（包括客户端导航）都重新初始化
+      document.addEventListener('astro:page-load', initBackToTop);
     </script>
   </body>
 </html>

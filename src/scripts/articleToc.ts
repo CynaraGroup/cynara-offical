@@ -3,35 +3,39 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
 gsap.registerPlugin(ScrollToPlugin);
 
-const articleScrollContainer = document.querySelector<HTMLElement>('.app-scroll');
-const articlePage = document.getElementById('articlePage');
-const articleBody = document.getElementById('article-body');
-const tocCard = document.querySelector<HTMLElement>('.article-toc-card');
-const tocWrap = document.querySelector<HTMLElement>('.article-toc-wrap');
-const tocNav = document.querySelector<HTMLElement>('.article-toc-nav');
-const tocCursor = document.querySelector<HTMLElement>('.article-toc-cursor');
-const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
-const articleWindow = window as Window & typeof globalThis & {
-  articleTocScrollOffset?: number;
-};
+function initArticleToc() {
+  const articleScrollContainer = document.querySelector<HTMLElement>('.app-scroll');
+  const articlePage = document.getElementById('articlePage');
+  const articleBody = document.getElementById('article-body');
+  const tocCard = document.querySelector<HTMLElement>('.article-toc-card');
+  const tocWrap = document.querySelector<HTMLElement>('.article-toc-wrap');
+  const tocNav = document.querySelector<HTMLElement>('.article-toc-nav');
+  const tocCursor = document.querySelector<HTMLElement>('.article-toc-cursor');
+  const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+  const articleWindow = window as Window & typeof globalThis & {
+    articleTocScrollOffset?: number;
+  };
 
-const tocTargets = tocLinks
-  .map((link) => {
-    const slug = link.dataset.tocLink;
-    if (!slug) {
-      return null;
-    }
+  const tocTargets = tocLinks
+    .map((link) => {
+      const slug = link.dataset.tocLink;
+      if (!slug) {
+        return null;
+      }
 
-    const target = document.getElementById(slug);
-    if (!target) {
-      return null;
-    }
+      const target = document.getElementById(slug);
+      if (!target) {
+        return null;
+      }
 
-    return { link, target };
-  })
-  .filter((item): item is { link: HTMLAnchorElement; target: HTMLElement } => item !== null);
+      return { link, target };
+    })
+    .filter((item): item is { link: HTMLAnchorElement; target: HTMLElement } => item !== null);
 
-if (articleScrollContainer && articlePage && articleBody && tocCard && tocWrap && tocTargets.length > 0) {
+  if (!(articleScrollContainer && articlePage && articleBody && tocCard && tocWrap && tocTargets.length > 0)) {
+    return;
+  }
+
   const scrollOffset = articleWindow.articleTocScrollOffset ?? 104;
   let activeId = '';
   let scrollTween: gsap.core.Tween | null = null;
@@ -255,3 +259,6 @@ if (articleScrollContainer && articlePage && articleBody && tocCard && tocWrap &
     requestActiveUpdate();
   }
 }
+
+// 支持 View Transitions：每次页面加载都重新初始化 TOC
+document.addEventListener('astro:page-load', initArticleToc);

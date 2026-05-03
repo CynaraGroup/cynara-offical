@@ -111,7 +111,7 @@ const featuredProductsData = {
       scrollToSection?: (index: number) => void;
     };
 
-    (() => {
+    function initHomePage() {
       const appWindow = window as AppWindow;
       const wrapper = document.getElementById('fullpageWrapper');
       const dots = document.querySelectorAll<HTMLButtonElement>('#pageDots button');
@@ -338,6 +338,8 @@ const featuredProductsData = {
           sponsorsModal.classList.remove('opacity-0', 'pointer-events-none');
         });
       }
-    })();
+    }
+
+    document.addEventListener('astro:page-load', initHomePage);
   </script>
 </BaseLayout>

@@ -1,0 +1,23 @@
+{
+  "name": "Cynara",
+  "short_name": "Cynara",
+  "description": "Cynara 官方网站，展示产品、伙伴、专栏与团队动态。",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/Cynara.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

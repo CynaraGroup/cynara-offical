@@ -22,12 +22,16 @@ import { cynaraConfig } from '../config/cynara';
 <script>
   import gsap from "gsap";
 
-  const logo = document.getElementById('hero-logo');
-  if (logo) {
-    document.addEventListener('mousemove', (e) => {
+  function initHero() {
+    const logo = document.getElementById('hero-logo');
+    if (!logo) {
+      return;
+    }
+
+    const onMouseMove = (e: MouseEvent) => {
       const x = (e.clientX - window.innerWidth / 2) / 50;
       const y = (e.clientY - window.innerHeight / 2) / 50;
-      
+
       gsap.to(logo, {
         rotationY: x,
         rotationX: -y,
@@ -35,8 +39,10 @@ import { cynaraConfig } from '../config/cynara';
         ease: "power2.out",
         duration: 0.5
       });
-    });
-    
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+
     // 开局默认给一个浮动动画特效
     gsap.from(logo, {
       y: 30,
@@ -45,4 +51,6 @@ import { cynaraConfig } from '../config/cynara';
       ease: "power3.out"
     });
   }
+
+  document.addEventListener('astro:page-load', initHero);
 </script>
