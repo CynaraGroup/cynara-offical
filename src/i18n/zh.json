@@ -45,6 +45,12 @@
     "description": "与我们合作？欢迎",
     "description2": "我们"
   },
+  "footer": {
+    "tagline": "为未来构建创新软件系统。我们将想法转化为优雅、实用的解决方案。",
+    "nav": "导航",
+    "contact": "联系方式",
+    "copyright": "© 2022-2026 Cynara. 保留所有权利。"
+  },
   "aboutSection": {
     "title": "关于",
     "subtitle": "梦想 永无止境",

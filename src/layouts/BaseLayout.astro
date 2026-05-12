@@ -173,7 +173,7 @@ const keywords = cynaraConfig.site.keywords.join(', ');
 
     <div class="flex h-screen relative z-10">
       <Header lang={lang} />
-      <main class="app-scroll flex-1 ml-0 md:ml-24 lg:ml-26 overflow-x-hidden overflow-y-auto">
+      <main class="app-scroll flex-1 ml-0 md:ml-24 lg:ml-26 overflow-x-hidden overflow-y-auto" transition:animate="none">
         <div class="h-full">
           <slot />
         </div>

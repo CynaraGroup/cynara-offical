@@ -124,6 +124,17 @@ const featuredProductsData = {
         let isScrolling = false;
         let wheelTimeout: number | undefined;
         const scrollTimeout = 600;
+        const scrollContainer = document.querySelector<HTMLElement>('.app-scroll');
+
+        const getHashSectionIndex = () => {
+          const sectionMatch = window.location.hash.match(/^#section(\d+)$/);
+          if (!sectionMatch) {
+            return null;
+          }
+
+          const index = Number.parseInt(sectionMatch[1], 10);
+          return Number.isNaN(index) || index < 0 || index >= sections.length ? null : index;
+        };
 
         const updateActiveDot = () => {
           dots.forEach((dot, index) => {
@@ -131,8 +142,40 @@ const featuredProductsData = {
           });
         };
 
-        const scrollToSection = (index: number) => {
-          if (isScrolling || index < 0 || index >= sections.length) {
+        const jumpToSection = (index: number) => {
+          const nextSection = sections[index];
+          if (!nextSection) {
+            return;
+          }
+
+          const previousWrapperBehavior = wrapper.style.scrollBehavior;
+          const previousAppBehavior = scrollContainer?.style.scrollBehavior ?? '';
+
+          wrapper.style.scrollBehavior = 'auto';
+          if (scrollContainer) {
+            scrollContainer.style.scrollBehavior = 'auto';
+            scrollContainer.scrollTop = 0;
+          }
+
+          currentIndex = index;
+          nextSection.scrollIntoView({ behavior: 'auto', block: 'start' });
+          wrapper.scrollTop = nextSection.offsetTop - wrapper.offsetTop;
+          updateActiveDot();
+
+          window.requestAnimationFrame(() => {
+            wrapper.style.scrollBehavior = previousWrapperBehavior;
+            if (scrollContainer) {
+              scrollContainer.style.scrollBehavior = previousAppBehavior;
+            }
+          });
+        };
+
+        const scrollToSection = (index: number, behavior: ScrollBehavior = 'smooth') => {
+          if (index < 0 || index >= sections.length) {
+            return;
+          }
+
+          if (isScrolling) {
             return;
           }
 
@@ -143,15 +186,16 @@ const featuredProductsData = {
 
           isScrolling = true;
           currentIndex = index;
-          nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          nextSection.scrollIntoView({ behavior, block: 'start' });
           updateActiveDot();
 
           window.setTimeout(() => {
             isScrolling = false;
-          }, scrollTimeout);
+          }, behavior === 'smooth' ? scrollTimeout : 0);
         };
 
         appWindow.scrollToSection = scrollToSection;
+        jumpToSection(getHashSectionIndex() ?? 0);
 
         dots.forEach((dot) => {
           dot.addEventListener('click', () => {
@@ -217,17 +261,10 @@ const featuredProductsData = {
           }
         });
 
-        window.addEventListener('load', () => {
-          const sectionMatch = window.location.hash.match(/^#section(\d+)$/);
-          if (!sectionMatch) {
-            return;
-          }
-
-          const index = Number.parseInt(sectionMatch[1], 10);
-          if (!Number.isNaN(index)) {
-            window.setTimeout(() => {
-              scrollToSection(index);
-            }, 100);
+        window.addEventListener('hashchange', () => {
+          const hashIndex = getHashSectionIndex();
+          if (hashIndex !== null) {
+            scrollToSection(hashIndex);
           }
         });
       }
