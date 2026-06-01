@@ -28,6 +28,7 @@ export type CynaraConfig = {
   };
   articles: {
     pinnedOnlyOnHome: boolean;
+    pageSize: number;
     search: {
       enabled: boolean;
       excerptLength: number;
@@ -77,6 +78,7 @@ const defaultConfig: CynaraConfig = {
   },
   articles: {
     pinnedOnlyOnHome: true,
+    pageSize: 5,
     search: {
       enabled: true,
       excerptLength: 6,
@@ -146,6 +148,7 @@ function normalizeConfig(config: CynaraConfig): CynaraConfig {
     },
     articles: {
       ...config.articles,
+      pageSize: Number(config.articles.pageSize) || defaultConfig.articles.pageSize,
       search: {
         ...config.articles.search,
         excerptLength: Number(config.articles.search.excerptLength) || defaultConfig.articles.search.excerptLength,

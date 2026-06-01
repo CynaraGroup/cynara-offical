@@ -79,5 +79,11 @@
     "cdn": "本站由 腾讯云EdgeOne 提供CDN加速服务",
     "copyright": "Copyright © 2022-2026 CYNARA. All rights reserved.",
     "company": "© 汐奈工作室 保留所有权利。"
+  },
+  "pagination": {
+    "prev": "上一页",
+    "next": "下一页",
+    "page": "第 {current} / {total} 页",
+    "totalArticles": "共 {total} 篇文章"
   }
 }

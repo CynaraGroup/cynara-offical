@@ -1,4 +1,8 @@
-﻿---
-import ArticlesIndex from '../../page-templates/articles/ArticlesIndex.astro';
 ---
-<ArticlesIndex lang="zh" />
+// Redirect /articles to /articles/1
+---
+
+<meta http-equiv="refresh" content="0;url=/articles/1/" />
+<script is:inline>
+  window.location.href = '/articles/1/';
+</script>

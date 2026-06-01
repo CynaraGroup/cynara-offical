@@ -11,6 +11,10 @@ import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs';
 
 export default defineConfig({
   site: cynaraConfig.site.url,
+  server: {
+    port: 8080,
+    host: '127.0.0.1',
+  },
   image: {
     domains: [
       'i.mahiro.work',

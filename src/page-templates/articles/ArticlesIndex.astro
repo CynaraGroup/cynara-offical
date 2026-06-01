@@ -1,17 +1,24 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
 import { t, getLocalizedUrl } from '../../i18n';
 import { cynaraConfig } from '../../config/cynara';
 
-interface Props { lang: any }
-const { lang } = Astro.props;
+interface Props {
+  lang: any;
+  page: {
+    data: any[];
+    currentPage: number;
+    lastPage: number;
+    url: {
+      prev: string | null;
+      next: string | null;
+    };
+    total: number;
+  };
+}
 
-const allArticles = await getCollection('articles', ({ data }: any) => {
-  return import.meta.env.PROD ? data.draft !== true : true;
-});
-
-const sortedArticles = allArticles.sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const { lang, page } = Astro.props;
+const articlesRoute = getLocalizedUrl(cynaraConfig.routes.articles, lang);
 ---
 
 <BaseLayout
@@ -26,6 +33,9 @@ const sortedArticles = allArticles.sort((a: any, b: any) => b.data.pubDate.value
       <p class="text-base leading-7 text-gray-400 md:text-xl">
         {lang === 'zh' ? '在这里浏览全部文章，也可以直接搜索正文内容。' : 'Browse every article here, or search directly through full article content.'}
       </p>
+      <p class="text-sm text-gray-500 mt-2">
+        {t(lang, 'pagination.totalArticles', { total: page.total })}
+      </p>
     </div>
 
     <section class="pagefind-shell pagefind-shell-minimal glass-card rounded-[2rem] p-4 md:p-5 mb-10 overflow-hidden" id="articles-search-panel" data-pagefind-ignore="all">
@@ -39,7 +49,7 @@ const sortedArticles = allArticles.sort((a: any, b: any) => b.data.pubDate.value
     </section>
 
     <div class="grid gap-4 md:gap-8" id="articles-list">
-      {sortedArticles.length > 0 ? sortedArticles.map((article: any) => (
+      {page.data.length > 0 ? page.data.map((article: any) => (
         <a href={getLocalizedUrl(`/articles/${article.slug}`, lang)} transition:name={`article-card-${article.slug}`} class="block group glass-card p-5 md:p-8 rounded-3xl transition-all duration-300 hover:bg-white/5 hover:scale-[1.02]">
           <div class="flex flex-col gap-2">
             <h2 class="text-xl md:text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
@@ -84,6 +94,40 @@ const sortedArticles = allArticles.sort((a: any, b: any) => b.data.pubDate.value
         </p>
       )}
     </div>
+
+    {page.lastPage > 1 && (
+      <nav class="flex items-center justify-center gap-4 mt-12" aria-label="Pagination">
+        {page.url.prev ? (
+          <a
+            href={page.url.prev}
+            class="glass-btn px-5 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all"
+          >
+            ← {t(lang, 'pagination.prev')}
+          </a>
+        ) : (
+          <span class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 cursor-not-allowed">
+            ← {t(lang, 'pagination.prev')}
+          </span>
+        )}
+
+        <span class="text-sm text-gray-400">
+          {t(lang, 'pagination.page', { current: page.currentPage, total: page.lastPage })}
+        </span>
+
+        {page.url.next ? (
+          <a
+            href={page.url.next}
+            class="glass-btn px-5 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all"
+          >
+            {t(lang, 'pagination.next')} →
+          </a>
+        ) : (
+          <span class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 cursor-not-allowed">
+            {t(lang, 'pagination.next')} →
+          </span>
+        )}
+      </nav>
+    )}
   </div>
 
   <script is:inline define:vars={{ pagefindLang: lang, pagefindOptions: cynaraConfig.articles.search }}>

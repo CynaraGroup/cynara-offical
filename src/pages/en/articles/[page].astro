@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import ArticlesIndex from '../../../page-templates/articles/ArticlesIndex.astro';
+import { cynaraConfig } from '../../../config/cynara';
+
+export async function getStaticPaths({ paginate }: any) {
+  const allArticles = await getCollection('articles', ({ data }: any) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  const sortedArticles = allArticles.sort(
+    (a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+
+  return paginate(sortedArticles, {
+    pageSize: cynaraConfig.articles.pageSize,
+  });
+}
+
+interface Props {
+  page: any;
+}
+
+const { page } = Astro.props;
+---
+
+<ArticlesIndex lang="en" page={page} />

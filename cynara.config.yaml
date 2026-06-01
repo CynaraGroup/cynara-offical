@@ -41,6 +41,8 @@ home:
 articles:
   # true 表示首页只展示 frontmatter 里 pin: true 的文章。
   pinnedOnlyOnHome: true
+  # 文章列表每页显示数量。
+  pageSize: 5
   search:
     # 是否启用文章列表页的 Pagefind 搜索。
     enabled: true

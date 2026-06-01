@@ -117,5 +117,11 @@
     "cdn": "This site is accelerated by Tencent Cloud EdgeOne CDN",
     "copyright": "Copyright © 2022-2026 CYNARA. All rights reserved.",
     "company": "© Cynara Studio. All rights reserved."
+  },
+  "pagination": {
+    "prev": "Previous",
+    "next": "Next",
+    "page": "Page {current} of {total}",
+    "totalArticles": "{total} articles in total"
   }
 }
