@@ -9,5 +9,15 @@
         { "text": "立即体验", "url": "https://layrain.cynara.my" },
         { "text": "开放平台", "url": "https://dev.layrain.cynara.my" }
     ]
+  },
+  {
+    "name": "Account",
+    "nameCn": "汐奈账号",
+    "desc": "新一代统一身份认证中枢，为开发者与用户提供极致安全、现代化的授权与登录体验。",
+    "iconPath": "https://s.mahiro.work/d/cynara-oauth/logo.png?sign=4rG13MKO3GFZuczhQ-Jn9dZHE3eif1x-UmQJy3vN0RI=:0",
+    "imagePath": "/products/introduce/account.png",
+    "links": [
+        { "text": "立即接入", "url": "https://account.mahiro.work/" }
+    ]
   }
 ]

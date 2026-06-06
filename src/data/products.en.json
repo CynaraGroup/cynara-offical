@@ -9,5 +9,15 @@
       { "text": "Try now", "url": "https://layrain.cynara.my" },
       { "text": "Open platform", "url": "https://dev.layrain.cynara.my" }
     ]
+  },
+  {
+    "name": "Account",
+    "nameEn": "Account",
+    "desc": "The new generation of unified identity authentication hub provides developers and users with an extremely secure and modern authorization and login experience.",
+    "iconPath": "https://s.mahiro.work/d/cynara-oauth/logo.png?sign=4rG13MKO3GFZuczhQ-Jn9dZHE3eif1x-UmQJy3vN0RI=:0",
+    "imagePath": "/products/introduce/account.png",
+    "links": [
+        { "text": "Connect", "url": "https://account.mahiro.work/" }
+    ]
   }
 ]
