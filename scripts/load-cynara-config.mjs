@@ -11,7 +11,7 @@ const configPath = path.join(rootDir, 'cynara.config.yaml');
 const defaultConfig = {
   site: {
     name: 'Cynara',
-    url: 'https://cynara.my',
+    url: 'https://cynara.work',
     description: {
       zh: 'Cynara 官方网站，展示产品、伙伴、专栏与团队动态。',
       en: 'Cynara official website featuring products, partners, articles, and team updates.',
